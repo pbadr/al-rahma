@@ -1,5 +1,7 @@
 from quart import Quart, request
 
+from util import get_chat_response
+
 app = Quart(__name__)
 
 @app.route('/api', methods=['POST'])
@@ -13,8 +15,10 @@ async def api():
 
   prompt = data['prompt']
 
+  response = get_chat_response(prompt)
+
   return {
-    'message': 'Hello from the backend'
+    'response': response
   }, 200
 
 app.run(port=5000)
