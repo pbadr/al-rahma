@@ -1,4 +1,5 @@
 {
+  "MONGODB_URI": "",
   "OPENAI_ORGANIZATION_ID": "",
   "OPENAI_API_KEY": ""
 }
