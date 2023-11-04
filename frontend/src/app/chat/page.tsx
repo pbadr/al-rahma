@@ -40,7 +40,7 @@ export default function Chat() {
 		<main className="p-5">
 			<form onSubmit={onSubmit}>
 				<div className="mb-3 flex flex-col">
-					<label htmlFor="prompt">Enter prompt</label>
+					<label className="mb-2" htmlFor="prompt">Enter prompt</label>
 					<input
 						className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2"
 						type="text"
@@ -58,6 +58,9 @@ export default function Chat() {
 					>
 						Submit
 					</button>
+					<p className="text-sm mt-3 opacity-50">
+						This application uses GPT-4 and the information it generates <span className="font-bold">can</span> be inaccurate.
+					</p>
 				</div>
 			</form>
 			{
