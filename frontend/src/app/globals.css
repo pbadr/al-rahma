@@ -10,3 +10,17 @@
 .button {
   @apply bg-secondary w-40 py-1 rounded-2xl hover:bg-blue-600 hover:border-blue-600 transition-colors disabled:cursor-not-allowed;
 }
+
+.appear {
+  animation: main-appear 200ms cubic-bezier(.55, .75, .50, 1);
+}
+
+@keyframes main-appear {
+  from {
+    scale: 0.98;
+    opacity: 0.9;
+  } to {
+    scale: 1;
+    opacity: 1;
+  }
+}

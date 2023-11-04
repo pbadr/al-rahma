@@ -37,7 +37,7 @@ export default function Chat() {
 	}
 
 	return (
-		<main className="p-5">
+		<main className="p-5 appear">
 			<form onSubmit={onSubmit}>
 				<div className="mb-3 flex flex-col">
 					<label className="mb-2" htmlFor="prompt">Enter prompt</label>
