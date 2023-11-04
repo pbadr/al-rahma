@@ -52,13 +52,13 @@ export default function Chat() {
 				</div>
 				<div>
 					<button
-						className="text-white bg-blue-700 rounded-lg hover:bg-blue-800 px-5 py-2.5 disabled:bg-blue-300 disabled:cursor-not-allowed"
+						className="button"
 						disabled={isLoading}
 						type="submit"
 					>
 						Submit
 					</button>
-					<p className="text-sm mt-3 opacity-50">
+					<p className="text-sm mt-3 opacity-70">
 						This application uses GPT-4 and the information it generates <span className="font-bold">can</span> be inaccurate.
 					</p>
 				</div>

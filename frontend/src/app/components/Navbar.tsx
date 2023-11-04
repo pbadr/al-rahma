@@ -3,7 +3,7 @@ import Link from "next/link"
 
 export default function Navbar() {
   return (
-    <nav className="p-5 flex items-center gap-5">
+    <nav className="flex items-center justify-center gap-5 bg-secondary rounded-b-lg">
       <Link href="/">
         <Image
           className="hover:opacity-90 transition-opacity"
@@ -12,7 +12,7 @@ export default function Navbar() {
           width={80} height={80} />
       </Link>
       <div className="flex">
-        <Link href="/chat">Chat</Link>
+        <Link href="/chat" className="hover:text-blue-100">Chat</Link>
       </div>
     </nav>
   )
