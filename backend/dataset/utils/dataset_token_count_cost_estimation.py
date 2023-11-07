@@ -34,7 +34,7 @@ def num_assistant_tokens_from_messages(messages):
 	return num_tokens
 
 def print_distribution(values, name):
-	print(f"\n#### Distribution of {name}:")
+	print(f"\\n#### Distribution of {name}:")
 	print(f"min / max: {min(values)}, {max(values)}")
 	print(f"mean / median: {np.mean(values)}, {np.median(values)}")
 	print(f"p5 / p95: {np.quantile(values, 0.1)}, {np.quantile(values, 0.9)}")
@@ -63,7 +63,7 @@ print_distribution(n_messages, "num_messages_per_example")
 print_distribution(convo_lens, "num_total_tokens_per_example")
 print_distribution(assistant_message_lens, "num_assistant_tokens_per_example")
 n_too_long = sum(l > 4096 for l in convo_lens)
-print(f"\n{n_too_long} examples may be over the 4096 token limit, they will be truncated during fine-tuning")
+print(f"\\n{n_too_long} examples may be over the 4096 token limit, they will be truncated during fine-tuning")
 
 
 # Pricing and default n_epochs estimate
