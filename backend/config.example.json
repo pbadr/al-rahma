@@ -1,5 +1,6 @@
 {
   "MONGODB_URI": "",
   "OPENAI_ORGANIZATION_ID": "",
-  "OPENAI_API_KEY": ""
+  "OPENAI_API_KEY": "",
+  "QUART_APP_SECRET": ""
 }

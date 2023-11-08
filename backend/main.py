@@ -3,16 +3,40 @@ import json
 from quart import Quart, request, abort, make_response
 from quart_cors import cors
 
-from util import get_chat_response, ServerSentEvent
+from util import get_chat_response, ServerSentEvent, config
 
 from urllib.parse import unquote
 
 app = Quart(__name__)
+app.secret_key = config['QUART_APP_SECRET']
 app = cors(app, allow_origin=['http://localhost:3000'])
+
+from quart_auth import (
+  QuartAuth, AuthUser, Unauthorized,
+  login_required, login_user, logout_user,
+  current_user
+)
+
+QuartAuth(app)
 
 import asyncio
 
+@app.errorhandler(Unauthorized)
+async def unauthorized(*_):
+  return {
+    "message": "You are unauthorized to access this route"
+  }, 401
+
+@app.route('/')
+@login_required
+async def index():
+  return {
+    "message": "Hello from auth required route",
+    "user_id": current_user.auth_id
+  }, 200
+
 @app.route('/sse', methods=['GET'])
+@login_required
 async def sse():
   if "text/event-stream" not in request.accept_mimetypes:
     abort(400)
@@ -49,8 +73,24 @@ async def sse():
   response.timeout = None
   return response
 
+@app.route('/login')
+async def login():
+  login_user(AuthUser(1), remember=True)
+
+  return {
+    "message": "Logged in"
+  }, 200
+
+@app.route('/logout')
+async def logout():
+  logout_user()
+
+  return {
+    "message": "Logged out"
+  }, 200
 
 @app.route('/api', methods=['POST'])
+@login_required
 async def api():
   data = json.loads(await request.get_data(as_text=True))
 
