@@ -2,5 +2,9 @@
   "MONGODB_URI": "",
   "OPENAI_ORGANIZATION_ID": "",
   "OPENAI_API_KEY": "",
-  "QUART_APP_SECRET": ""
+  "QUART_APP_SECRET": "",
+  "BASE_MODEL": "",
+  "SYSTEM_MESSAGE": "",
+  "TEMPERATURE": 0,
+  "MAX_TOKENS": 0
 }

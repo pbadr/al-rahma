@@ -8,11 +8,11 @@ openai.organization = config['OPENAI_ORGANIZATION_ID']
 
 def get_chat_response(prompt):
 	response = openai.ChatCompletion.create(
-		model="gpt-4",
-		temperature=0,
-		max_tokens=500,
+		model=config['BASE_MODEL'],
+		temperature=config['TEMPERATURE'],
+		max_tokens=config['MAX_TOKENS'],
 		messages=[
-			{"role": "system", "content": "You are an assistant that only responds to greetings."},
+			config['SYSTEM_MESSAGE'],
 			{"role": "user", "content": prompt},
 		]
 	)
@@ -21,11 +21,11 @@ def get_chat_response(prompt):
 
 def get_chat_stream_response(prompt):
 	response = openai.ChatCompletion.create(
-		model="gpt-4",
-		temperature=0.3,
-		max_tokens=500,
+		model=config['BASE_MODEL'],
+		temperature=config['TEMPERATURE'],
+		max_tokens=config['MAX_TOKENS'],
 		messages=[
-			{"role": "system", "content": "You are an assistant that only responds to greetings."},
+			config['SYSTEM_MESSAGE'],
 			{"role": "user", "content": prompt},
 		],
 		stream=True
