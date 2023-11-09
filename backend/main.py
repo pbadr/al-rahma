@@ -80,7 +80,7 @@ async def sse():
   response.timeout = None
   return response
 
-@app.route('/login')
+@app.route('/login', methods=['POST'])
 async def login():
   login_user(AuthUser(1), remember=True)
 

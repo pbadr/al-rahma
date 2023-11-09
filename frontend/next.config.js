@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    API_ROUTE: 'http://127.0.0.1:5000'
+    API_ROUTE: 'http://localhost:5000'
   }
 }
 
