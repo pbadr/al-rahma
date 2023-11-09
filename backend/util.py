@@ -19,6 +19,35 @@ def get_chat_response(prompt):
 
 	return response['choices'][0]['message']['content']
 
+def get_chat_stream_response(prompt):
+	response = openai.ChatCompletion.create(
+		model="gpt-4",
+		temperature=0.3,
+		max_tokens=500,
+		messages=[
+			{"role": "system", "content": "You are an assistant that only responds to greetings."},
+			{"role": "user", "content": prompt},
+		],
+		stream=True
+	)
+
+	def process_response(response):
+		for chunk in response:
+			chunk_message = chunk['choices'][0]['delta']
+
+			# If the chunk messae has a chunk response with 'assistant', move to next event
+			if 'role' in chunk_message:
+				continue
+
+			if not chunk['choices'][0]['delta']:
+				chunk_message = None
+			else:
+				chunk_message = chunk['choices'][0]['delta']['content']
+			
+			yield chunk_message
+
+	return process_response(response)
+
 from dataclasses import dataclass
 
 @dataclass

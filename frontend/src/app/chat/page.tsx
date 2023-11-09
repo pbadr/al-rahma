@@ -49,13 +49,14 @@ export default function Chat() {
 		const promptUrlParam = encodeURIComponent(prompt);
 
 		const eventSource = new EventSource(
-			`${process.env.API_ROUTE}/sse?prompt=${promptUrlParam}`
+			`${process.env.API_ROUTE}/sse?prompt=${promptUrlParam}`,
+			{ withCredentials: true }
 		)
 
 		eventSource.onmessage = (event) => {
 			const data: ServerResponse = JSON.parse(event.data);
 			console.log(data);
-			if (data.token === '!CLOSE_FROM_SERVER') {
+			if (data.token === '!end') {
 				eventSource.close();
 				setIsLoading(false);
 				return;
@@ -67,7 +68,7 @@ export default function Chat() {
 					if (previousMessage === '')
 						return data.token;
 					
-					return previousMessage + ' ' + data.token;
+					return previousMessage + data.token;
 				}
 			)
 		}

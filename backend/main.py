@@ -3,13 +3,13 @@ import json
 from quart import Quart, request, abort, make_response
 from quart_cors import cors
 
-from util import get_chat_response, ServerSentEvent, config
+from util import get_chat_response, get_chat_stream_response, ServerSentEvent, config
 
 from urllib.parse import unquote
 
 app = Quart(__name__)
 app.secret_key = config['QUART_APP_SECRET']
-app = cors(app, allow_origin=['http://localhost:3000'])
+app = cors(app, allow_origin=['http://localhost:3000'], allow_credentials=True)
 
 from quart_auth import (
   QuartAuth, AuthUser, Unauthorized,
@@ -35,6 +35,8 @@ async def index():
     "user_id": current_user.auth_id
   }, 200
 
+
+import asyncio
 @app.route('/sse', methods=['GET'])
 @login_required
 async def sse():
@@ -48,18 +50,23 @@ async def sse():
     }, 400
   
   prompt = unquote(raw_prompt)
-  some_sse_data = prompt.split(' ')
-  some_sse_data.append('!CLOSE_FROM_SERVER')
+  response_stream = get_chat_stream_response(prompt)
 
   async def send_events():
-    for index, data in enumerate(some_sse_data):
-      await asyncio.sleep(0.05) # Simulate GPT delay
-
+    for index, chunk_message in enumerate(response_stream):
+      response_content = chunk_message
+      if not chunk_message:
+        response_content = "!end"
+      
       data = json.dumps({
-        "token": data
+        "token": response_content
       })
 
       event = ServerSentEvent(data, event='message', id=index)
+
+      # Allow SSE to send event immediately. it's weird. I know.
+      # See https://bugs.python.org/issue34476
+      await asyncio.sleep(0)
       yield event.encode()
     
   response = await make_response(
