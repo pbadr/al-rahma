@@ -3,6 +3,7 @@
 import { ChangeEvent, FormEvent, useState } from "react"
 
 import { Rubik } from "next/font/google";
+import ChatInput from "../components/ChatInput";
 
 const rubik = Rubik({ weight: "400", subsets: ["arabic"] })
 
@@ -83,36 +84,18 @@ export default function Chat() {
 
 	return (
 		<main className="p-5 appear">
-			<form onSubmit={onSubmit}>
-				<div className="mb-3 flex flex-col">
-					<label className="mb-2" htmlFor="prompt">Enter prompt</label>
-					<textarea
-						className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2"
-						name="prompt"
-						value={prompt}
-						onChange={handlePromptChange}
-						autoComplete="off"
-					/>
-				</div>
-				<div>
-					<button
-						className="button"
-						disabled={isLoading || prompt.length === 0}
-						type="submit"
-					>
-						Send
-					</button>
-					<p className="text-sm mt-3 opacity-70">
-						This application uses GPT-4 and the information it generates <span className="font-bold">can</span> be inaccurate.
-					</p>
-				</div>
-			</form>
 			{error && 
 				<span className="text-xs font-medium px-2.5 py-1 rounded bg-red-900 text-red-300">
 					{error}
 				</span>
 			}
 			<p className={`mt-5 text-3xl whitespace-break-spaces ${rubik.className}`}>{currentMessage}</p>
+			<ChatInput
+				isLoading={isLoading}
+				prompt={prompt}
+				handlePromptChange={handlePromptChange}
+				onSubmit={onSubmit}
+			/>
 		</main>
 	)
 }
