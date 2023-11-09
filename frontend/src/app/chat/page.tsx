@@ -11,6 +11,7 @@ interface ServerResponse {
 }
 
 export default function Chat() {
+	const [error, setError] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [prompt, setPrompt] = useState<string>('');
 	const [messages, setMessages] = useState<Array<string>>([]);
@@ -72,6 +73,12 @@ export default function Chat() {
 				}
 			)
 		}
+
+		eventSource.onerror = (_) => {
+			setError("Oops, something went wrong!");
+			setIsLoading(false);
+		}
+		
 	}
 
 	return (
@@ -90,16 +97,21 @@ export default function Chat() {
 				<div>
 					<button
 						className="button"
-						disabled={isLoading}
+						disabled={isLoading || prompt.length === 0}
 						type="submit"
 					>
-						Submit
+						Send
 					</button>
 					<p className="text-sm mt-3 opacity-70">
 						This application uses GPT-4 and the information it generates <span className="font-bold">can</span> be inaccurate.
 					</p>
 				</div>
 			</form>
+			{error && 
+				<span className="text-xs font-medium px-2.5 py-1 rounded bg-red-900 text-red-300">
+					{error}
+				</span>
+			}
 			<p className={`mt-5 text-3xl whitespace-break-spaces ${rubik.className}`}>{currentMessage}</p>
 		</main>
 	)

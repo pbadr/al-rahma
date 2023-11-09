@@ -8,7 +8,16 @@
 }
 
 .button {
-  @apply bg-secondary w-40 py-1 rounded-2xl hover:bg-blue-600 hover:border-blue-600 transition-colors disabled:cursor-not-allowed;
+  @apply bg-secondary w-40 py-1 rounded-2xl hover:bg-blue-600 hover:border-blue-600 transition-colors;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  @apply opacity-40;
+}
+
+.button:disabled:hover {
+  @apply bg-secondary;
 }
 
 .appear {
