@@ -9,11 +9,6 @@
   @apply px-6 py-3 bg-slate-500 self-start bg-gradient-to-b from-[#33487B] to-[#293D6E];
   max-width: 80%;
   border-radius: 0 25px 25px 25px;
-  animation: message-appear 50ms ease-in-out;
-}
-
-.assistant-message.new-message {
-  animation: none !important;
 }
 
 .message a {

@@ -2,7 +2,7 @@
 
 import "./page.css";
 
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, createRef, useEffect, useState } from "react"
 
 import ChatInput from "../components/chat/ChatInput";
 import ChatLog from "../components/chat/ChatLog";
@@ -19,12 +19,24 @@ export interface ChatObject {
 
 
 export default function Chat() {
+	// Scrolling behavior
+	const ref = createRef<HTMLDivElement>();
+
 	const [error, setError] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [inputPrompt, setInputPrompt] = useState<string>('');
 
 	const [messages, setMessages] = useState<ChatObject[]>([]);
-  const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
+	const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
+	
+	useEffect(() => {
+		if (ref.current) {
+			ref.current.scrollTo({
+				top: ref.current.scrollHeight,
+				behavior: "smooth"
+			});
+		}
+	}, [ref]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;
@@ -79,6 +91,8 @@ export default function Chat() {
 		// 	setIsLoading(false);
 		// }
 
+		// return;
+
 		const promptUrlParam = encodeURIComponent(prompt);
 
 		const eventSource = new EventSource(
@@ -132,7 +146,7 @@ export default function Chat() {
 					{error}
 				</span>
 			}
-			<div className="chatlog-container overflow-y-auto">
+			<div ref={ref} className="chatlog-container overflow-y-auto">
 				<ChatLog
 					currentAssistantMessage={currentAssistantMessage}
 					messages={messages}
