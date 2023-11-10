@@ -2,44 +2,43 @@
 
 import { ChangeEvent, FormEvent, useState } from "react"
 
-import { Rubik } from "next/font/google";
-import ChatInput from "../components/ChatInput";
-
-const rubik = Rubik({ weight: "400", subsets: ["arabic"] })
+import ChatInput from "../components/chat/ChatInput";
+import ChatLog from "../components/chat/ChatLog";
 
 interface ServerResponse {
 	token: string
 }
 
+export interface ChatObject {
+  role: string;
+  content: string;
+}
+
+
 export default function Chat() {
 	const [error, setError] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [prompt, setPrompt] = useState<string>('');
-	const [messages, setMessages] = useState<Array<string>>([]);
 
-	const [currentMessage, setCurrentMessage] = useState<string>('');
+	const [messages, setMessages] = useState<ChatObject[]>([]);
+  const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
 
 	async function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		setIsLoading(true);
-		setCurrentMessage('');
+		setCurrentAssistantMessage('');
 
 		try {
+			// Set your own message on the messages list
+			setMessages(previousMessages => [...previousMessages, {
+				role: "user",
+				content: prompt
+			}]);
+
 			await streamMessage();
-			
-			// const response = await fetch(`${process.env.API_ROUTE}/api` as string, {
-			// 	method: 'POST',
-			// 	body: JSON.stringify({ prompt })
-			// });
-
-			// const data: ServerResponse = await response.json();
-			// const generatedPrompt = data.response;
-
-			// setMessages(messages => [...messages, generatedPrompt]);
 		} catch (error) {
 			console.error(error);
-		} finally {
-			// setIsLoading(false);
+			setIsLoading(false);
 		}
 	}
 
@@ -61,11 +60,19 @@ export default function Chat() {
 			if (data.token === '!end') {
 				eventSource.close();
 				setIsLoading(false);
+				
+				// Set current assistant message to empty and append the finished assistant message to the messages list
+				setCurrentAssistantMessage('');
+				setMessages(previousMessages => [...previousMessages, {
+					role: "assistant",
+					content: currentAssistantMessage
+				}]);
+
 				return;
 			}
 			
 			console.log(data.token)
-			setCurrentMessage(
+			setCurrentAssistantMessage(
 				previousMessage => {
 					if (previousMessage === '')
 						return data.token;
@@ -79,7 +86,6 @@ export default function Chat() {
 			setError("Oops, something went wrong!");
 			setIsLoading(false);
 		}
-		
 	}
 
 	return (
@@ -89,7 +95,10 @@ export default function Chat() {
 					{error}
 				</span>
 			}
-			<p className={`mt-5 text-3xl whitespace-break-spaces ${rubik.className}`}>{currentMessage}</p>
+			<ChatLog
+				currentAssistantMessage={currentAssistantMessage}
+				messages={messages}
+			/>
 			<ChatInput
 				isLoading={isLoading}
 				prompt={prompt}
