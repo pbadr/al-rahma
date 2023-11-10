@@ -1,3 +1,9 @@
 .chat-suggestion-box {
-  @apply flex items-center p-5 rounded-xl bg-secondary font-bold cursor-pointer hover:bg-blue-900 transition-colors;
+  @apply flex items-center p-5 rounded-xl bg-secondary font-bold cursor-pointer hover:bg-[#15213C] transition-colors;
+  border: solid 1px transparent;
+  box-sizing: border-box;
+}
+
+.chat-suggestion-box:active {
+  @apply border-[1px] border-blue-200;
 }
