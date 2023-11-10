@@ -5,7 +5,7 @@ import "./Navbar.css";
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-center gap-5 bg-secondary rounded-b-lg">
+    <nav className="flex items-center justify-center gap-5 bg-secondary rounded-b-2xl h-[70px]">
       <Link href="/">
         <Image
           className="hover:opacity-90 transition-opacity logo"

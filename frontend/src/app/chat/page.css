@@ -1,6 +1,10 @@
+.chat-container {
+  height: calc(100vh - 70px);
+}
+
 .chatlog-container {
   padding: 20px;
-  max-height: 70vh;
+  height: calc(100% - 130px);
   overflow-y: auto;
 }
 

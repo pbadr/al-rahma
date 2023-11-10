@@ -126,7 +126,7 @@ export default function Chat() {
 	}
 
 	return (
-		<main>
+		<main className="chat-container">
 			{error && 
 				<span className="text-xs font-medium px-2.5 py-1 rounded bg-red-900 text-red-300">
 					{error}
@@ -138,7 +138,7 @@ export default function Chat() {
 					messages={messages}
 				/>
 			</div>
-			<div className="chatinput-container fixed bottom-0 w-full p-5 h-[130px]">
+			<div className="chatinput-container fixed bottom-0 w-full px-5 h-[130px]">
 				<ChatInput
 					isLoading={isLoading}
 					prompt={inputPrompt}
