@@ -4,9 +4,9 @@ import "./page.css";
 
 import { ChangeEvent, createRef, useEffect, useState } from "react"
 
-import ChatInput from "../components/chat/ChatInput";
-import ChatLog from "../components/chat/ChatLog";
-// import { simulateResponse } from "../utils/test";
+import ChatInput from "@/components/chat/input/ChatInput";
+import ChatLog from "@/components/chat/log/ChatLog";
+// import { simulateResponse } from "@/utils/test";
 
 interface ServerResponse {
 	token: string

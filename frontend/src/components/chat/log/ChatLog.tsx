@@ -3,8 +3,8 @@ import "./ChatLog.css";
 import { Rubik } from "next/font/google";
 const rubik = Rubik({ weight: "400", subsets: ["arabic"] })
 
-import { ChatObject } from '../../chat/page';
-import ChatSuggestion from "./ChatSuggestion";
+import { ChatObject } from '@/app/chat/page';
+import ChatSuggestion from "@/components/chat/suggestions/ChatSuggestion";
 import { Dispatch, SetStateAction } from "react";
 
 interface ChatLogProps {
