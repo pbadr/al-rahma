@@ -18,7 +18,7 @@ export default function ChatLog({ currentAssistantMessage, messages }: ChatLogPr
           <div
             key={index}
             className={
-              `${message.role === 'user' ? 'user-message' : 'assistant-message'} ${index === messages.length - 1 && 'my-3'}`
+              `whitespace-break-spaces ${message.role === 'user' ? 'user-message' : 'assistant-message'} ${index === messages.length - 1 && 'my-3'}`
             }
           >
             <p>{message.content}</p>
@@ -27,7 +27,7 @@ export default function ChatLog({ currentAssistantMessage, messages }: ChatLogPr
       }
       {
         currentAssistantMessage &&
-          <div className="assistant-message mb-3">
+          <div className="whitespace-break-spaces assistant-message mb-3">
             <p>{currentAssistantMessage}</p>
           </div>
       }
