@@ -1,8 +1,12 @@
 .chat-container {
-  height: calc(100vh - 70px);
+  height: 100vh; /* calc(100vh - 50px) Viewport - Navbar height */
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .chatlog-container {
+  max-width: 1000px;
   padding: 20px;
   height: calc(100% - 130px);
   overflow-y: auto;
