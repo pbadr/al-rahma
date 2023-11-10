@@ -32,7 +32,7 @@ export default function ChatInput({ prompt, isLoading, handlePromptChange, onSub
         </div>
       </div>
       <div>
-        <p className=" text-xs text-center mt-3 opacity-70">
+        <p className="md:text-xs text-center mt-3 opacity-70 text-[10px]">
           Al-Rahma can <b>sometimes</b> generate inaccurate information. Please remember to cross-check your answers
         </p>
       </div>

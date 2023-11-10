@@ -1,5 +1,7 @@
 "use client";
 
+import "./page.css";
+
 import { ChangeEvent, FormEvent, useState } from "react"
 
 import ChatInput from "../components/chat/ChatInput";
@@ -21,13 +23,8 @@ export default function Chat() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [prompt, setPrompt] = useState<string>('');
 
-	const [messages, setMessages] = useState<ChatObject[]>([
-		{ 'role': 'user', 'content': "hello world!" },
-		{ 'role': 'assistant', 'content': "Hello! How can I assist you today on this wonderful day?" },
-		{ 'role': 'user', 'content': "What's up!!" },
-		
-	]);
-  const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('Nothing much');
+	const [messages, setMessages] = useState<ChatObject[]>([]);
+  const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
 
 	async function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -123,22 +120,26 @@ export default function Chat() {
 	}
 
 	return (
-		<main className="p-5 appear">
+		<main className="appear">
 			{error && 
 				<span className="text-xs font-medium px-2.5 py-1 rounded bg-red-900 text-red-300">
 					{error}
 				</span>
 			}
-			<ChatLog
-				currentAssistantMessage={currentAssistantMessage}
-				messages={messages}
-			/>
-			<ChatInput
-				isLoading={isLoading}
-				prompt={prompt}
-				handlePromptChange={handlePromptChange}
-				onSubmit={onSubmit}
-			/>
+			<div className="chatlog-container overflow-y-auto">
+				<ChatLog
+					currentAssistantMessage={currentAssistantMessage}
+					messages={messages}
+				/>
+			</div>
+			<div className="fixed bottom-0 w-full p-5 h-[130px]">
+				<ChatInput
+					isLoading={isLoading}
+					prompt={prompt}
+					handlePromptChange={handlePromptChange}
+					onSubmit={onSubmit}
+				/>
+			</div>
 		</main>
 	)
 }

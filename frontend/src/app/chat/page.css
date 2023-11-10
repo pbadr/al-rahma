@@ -1,0 +1,23 @@
+.chatlog-container {
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.chatlog-container::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chatlog-container::-webkit-scrollbar-track {
+  @apply bg-primary;
+  border-radius: 5px;
+}
+
+.chatlog-container::-webkit-scrollbar-thumb {
+  @apply bg-secondary;
+  border-radius: 5px;
+}
+
+.chatlog-container::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#33487B];
+}
