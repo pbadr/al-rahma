@@ -2,10 +2,22 @@
   @apply px-6 py-3 bg-slate-500 self-end bg-gradient-to-b from-[#15213C] to-[#142245];
   max-width: 80%;
   border-radius: 25px 0 25px 25px;
+  animation: message-appear 100ms ease-in-out;
 }
 
 .assistant-message {
-  @apply px-6 py-3 my-5 bg-slate-500 self-start bg-gradient-to-b from-[#33487B] to-[#293D6E];
+  @apply px-6 py-3 bg-slate-500 self-start bg-gradient-to-b from-[#33487B] to-[#293D6E];
   max-width: 80%;
   border-radius: 0 25px 25px 25px;
+  animation: message-appear 100ms ease-in-out;
+}
+
+@keyframes message-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  } to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

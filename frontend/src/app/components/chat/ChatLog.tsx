@@ -15,14 +15,22 @@ export default function ChatLog({ currentAssistantMessage, messages }: ChatLogPr
     <section className="flex flex-col">
       {
         messages.map((message, index) => (
-          <div key={index} className={`${message.role === 'user' ? 'user-message' : 'assistant-message'}`}>
+          <div
+            key={index}
+            className={
+              `${message.role === 'user' ? 'user-message' : 'assistant-message'} ${index === messages.length - 1 && 'my-3'}`
+            }
+          >
             <p>{message.content}</p>
           </div>
         ))
       }
-      <div className="assistant-message">
-        <p>{currentAssistantMessage}</p>
-      </div>
+      {
+        currentAssistantMessage &&
+          <div className="assistant-message mb-3">
+            <p>{currentAssistantMessage}</p>
+          </div>
+      }
     </section>
   )
 }
