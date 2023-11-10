@@ -23,14 +23,14 @@ export default function ChatLog({ currentAssistantMessage, messages }: ChatLogPr
               `
             }
           >
-            <p>{message.content}</p>
+            <p className="message" dangerouslySetInnerHTML={{__html: message.content}} />
           </div>
         ))
       }
       {
         currentAssistantMessage &&
         <div className={`${rubik.className} whitespace-break-spaces assistant-message new-message my-2`}>
-            <p>{currentAssistantMessage}</p>
+            <p className="message" dangerouslySetInnerHTML={{__html: currentAssistantMessage}} />
           </div>
       }
     </section>

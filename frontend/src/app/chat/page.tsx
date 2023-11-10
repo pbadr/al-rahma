@@ -2,11 +2,11 @@
 
 import "./page.css";
 
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, useState } from "react"
 
 import ChatInput from "../components/chat/ChatInput";
 import ChatLog from "../components/chat/ChatLog";
-import { simulateResponse } from "../utils/test";
+// import { simulateResponse } from "../utils/test";
 
 interface ServerResponse {
 	token: string
@@ -21,13 +21,15 @@ export interface ChatObject {
 export default function Chat() {
 	const [error, setError] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [prompt, setPrompt] = useState<string>('');
+	const [inputPrompt, setInputPrompt] = useState<string>('');
 
 	const [messages, setMessages] = useState<ChatObject[]>([]);
   const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
 
-	async function onSubmit(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault();
+	async function onClickHandler() {
+		const prompt = inputPrompt;
+
+		setInputPrompt('');
 		setIsLoading(true);
 		setCurrentAssistantMessage('');
 
@@ -38,7 +40,7 @@ export default function Chat() {
 				content: prompt
 			}]);
 
-			await streamMessage();
+			await streamMessage(prompt);
 		} catch (error) {
 			console.error(error);
 			setIsLoading(false);
@@ -46,10 +48,10 @@ export default function Chat() {
 	}
 
 	const handlePromptChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-		setPrompt(event.target.value);
+		setInputPrompt(event.target.value);
 	}
 
-	async function streamMessage() {
+	async function streamMessage(prompt: string) {
 		// {
 		// 	// Test streaming tokens
 		// 	let newAssistantMessage = '';
@@ -136,12 +138,12 @@ export default function Chat() {
 					messages={messages}
 				/>
 			</div>
-			<div className="fixed bottom-0 w-full p-5 h-[130px]">
+			<div className="chatinput-container fixed bottom-0 w-full p-5 h-[130px]">
 				<ChatInput
 					isLoading={isLoading}
-					prompt={prompt}
+					prompt={inputPrompt}
 					handlePromptChange={handlePromptChange}
-					onSubmit={onSubmit}
+					onClickHandler={onClickHandler}
 				/>
 			</div>
 		</main>
