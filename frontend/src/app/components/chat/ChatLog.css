@@ -1,0 +1,11 @@
+.user-message {
+  @apply px-6 py-3 bg-slate-500 self-end bg-gradient-to-b from-[#15213C] to-[#142245];
+  max-width: 80%;
+  border-radius: 25px 0 25px 25px;
+}
+
+.assistant-message {
+  @apply px-6 py-3 my-5 bg-slate-500 self-start bg-gradient-to-b from-[#33487B] to-[#293D6E];
+  max-width: 80%;
+  border-radius: 0 25px 25px 25px;
+}

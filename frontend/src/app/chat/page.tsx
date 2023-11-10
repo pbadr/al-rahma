@@ -20,8 +20,13 @@ export default function Chat() {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [prompt, setPrompt] = useState<string>('');
 
-	const [messages, setMessages] = useState<ChatObject[]>([]);
-  const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
+	const [messages, setMessages] = useState<ChatObject[]>([
+		{ 'role': 'user', 'content': "hello world!" },
+		{ 'role': 'assistant', 'content': "Hello! How can I assist you today on this wonderful day?\nHello! How can I assist you today on this wonderful day?" },
+		{ 'role': 'user', 'content': "thanks!!" },
+		
+	]);
+  const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('Hello world!');
 
 	async function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();

@@ -1,3 +1,5 @@
+import "./ChatLog.css";
+
 import { Rubik } from "next/font/google";
 const rubik = Rubik({ weight: "400", subsets: ["arabic"] })
 
@@ -11,11 +13,15 @@ interface ChatLogProps {
 export default function ChatLog({ currentAssistantMessage, messages }: ChatLogProps) {
   return (
     <section className="flex flex-col">
-      <div className="self-end">
-        <p>Message One</p>
-      </div>
-      <div>
-        <p>Message Two</p>
+      {
+        messages.map((message, index) => (
+          <div key={index} className={`${message.role === 'user' ? 'user-message' : 'assistant-message'}`}>
+            <p>{message.content}</p>
+          </div>
+        ))
+      }
+      <div className="assistant-message">
+        <p>{currentAssistantMessage}</p>
       </div>
     </section>
   )
