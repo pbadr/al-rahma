@@ -22,10 +22,10 @@ export default function ChatInput({ prompt, isLoading, handlePromptChange, onCli
 
   return (
     <form>
-      <div className="mb-3">
+      <div className="mb-3 p-2 lg:p-0">
         <div className="flex relative">
           <textarea
-            className="bg-[#18233D] text-white rounded-3xl focus:border-0 focus:outline-0 pl-5 py-3 pr-14 w-full max-h-80 overflow-auto resize-none"
+            className="bg-[#18233D] text-white rounded-xl lg:rounded-3xl focus:border-0 focus:outline-0 pl-5 py-3 pr-14 w-full max-h-80 overflow-auto resize-none"
             rows={1}
             name="prompt"
             value={prompt}
