@@ -50,34 +50,33 @@ export default function Chat() {
 	}
 
 	async function streamMessage() {
-		{
-			// Test streaming tokens
-			let newAssistantMessage = '';
-			for await (const token of simulateResponse()) {
-				setCurrentAssistantMessage(
-					previousMessage => {
-						console.log(previousMessage, newAssistantMessage)
-						if (previousMessage === '') {
-							newAssistantMessage = token;
-							return token;
-						}
-					
-						newAssistantMessage = previousMessage + token;
-						return previousMessage + token;
-					}
-				)
-			}
+		// {
+		// 	// Test streaming tokens
+		// 	let newAssistantMessage = '';
+		// 	for await (const token of simulateResponse()) {
+		// 		setCurrentAssistantMessage(
+		// 			previousMessage => {
+		// 				console.log(previousMessage, newAssistantMessage)
+		// 				if (previousMessage === '') {
+		// 					newAssistantMessage = token;
+		// 					return token;
+		// 				}
+		
+		// 				newAssistantMessage = previousMessage + token;
+		// 				return previousMessage + token;
+		// 			}
+		// 		)
+		// 	}
 
-			console.log(newAssistantMessage);
-			setMessages(previousMessages => [...previousMessages, {
-				'role': 'assistant',
-				'content': newAssistantMessage
-			}])
-			setCurrentAssistantMessage('');
-			setIsLoading(false);
-		}
+		// 	console.log(newAssistantMessage);
+		// 	setMessages(previousMessages => [...previousMessages, {
+		// 		'role': 'assistant',
+		// 		'content': newAssistantMessage
+		// 	}])
+		// 	setCurrentAssistantMessage('');
+		// 	setIsLoading(false);
+		// }
 
-		return;
 		const promptUrlParam = encodeURIComponent(prompt);
 
 		const eventSource = new EventSource(
@@ -85,29 +84,34 @@ export default function Chat() {
 			{ withCredentials: true }
 		)
 
+		let newAssistantMessage = '';
 		eventSource.onmessage = (event) => {
 			const data: ServerResponse = JSON.parse(event.data);
-			console.log(data);
+			console.log('Received token:', data.token)
+
 			if (data.token === '!end') {
 				eventSource.close();
 				setIsLoading(false);
 				
+				console.log(newAssistantMessage);
 				// Set current assistant message to empty and append the finished assistant message to the messages list
 				setCurrentAssistantMessage('');
 				setMessages(previousMessages => [...previousMessages, {
 					role: "assistant",
-					content: currentAssistantMessage
+					content: newAssistantMessage
 				}]);
 
 				return;
 			}
 			
-			console.log(data.token)
 			setCurrentAssistantMessage(
 				previousMessage => {
-					if (previousMessage === '')
+					if (previousMessage === '') {
+						newAssistantMessage = data.token;
 						return data.token;
+					}
 					
+					newAssistantMessage = previousMessage + data.token;
 					return previousMessage + data.token;
 				}
 			)
@@ -120,7 +124,7 @@ export default function Chat() {
 	}
 
 	return (
-		<main className="appear">
+		<main>
 			{error && 
 				<span className="text-xs font-medium px-2.5 py-1 rounded bg-red-900 text-red-300">
 					{error}
