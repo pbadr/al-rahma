@@ -21,7 +21,7 @@ export default function ChatInput({ prompt, isLoading, handlePromptChange, onSub
             autoComplete="off"
           />
           <button
-            className={`absolute right-0 bottom-0 mr-3 mb-2 opacity-50 ${prompt.length > 0 && 'bg-secondary !opacity-100'} p-1 px-2 rounded-full transition-colors transition-opacity`}
+            className={`absolute right-0 bottom-0 mr-3 mb-2 opacity-50 ${prompt.length > 0 && 'bg-secondary !opacity-100'} p-1 px-2 rounded-full transition-colors`}
             disabled={isLoading || prompt.length === 0}
             type="submit"
           >
