@@ -4,6 +4,7 @@ import { ChangeEvent, FormEvent, useState } from "react"
 
 import ChatInput from "../components/chat/ChatInput";
 import ChatLog from "../components/chat/ChatLog";
+import { simulateResponse } from "../utils/test";
 
 interface ServerResponse {
 	token: string
@@ -22,11 +23,11 @@ export default function Chat() {
 
 	const [messages, setMessages] = useState<ChatObject[]>([
 		{ 'role': 'user', 'content': "hello world!" },
-		{ 'role': 'assistant', 'content': "Hello! How can I assist you today on this wonderful day?\nHello! How can I assist you today on this wonderful day?" },
-		{ 'role': 'user', 'content': "thanks!!" },
+		{ 'role': 'assistant', 'content': "Hello! How can I assist you today on this wonderful day?" },
+		{ 'role': 'user', 'content': "What's up!!" },
 		
 	]);
-  const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('Hello world!');
+  const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('Nothing much');
 
 	async function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -52,6 +53,34 @@ export default function Chat() {
 	}
 
 	async function streamMessage() {
+		{
+			// Test streaming tokens
+			let newAssistantMessage = '';
+			for await (const token of simulateResponse()) {
+				setCurrentAssistantMessage(
+					previousMessage => {
+						console.log(previousMessage, newAssistantMessage)
+						if (previousMessage === '') {
+							newAssistantMessage = token;
+							return token;
+						}
+					
+						newAssistantMessage = previousMessage + token;
+						return previousMessage + token;
+					}
+				)
+			}
+
+			console.log(newAssistantMessage);
+			setMessages(previousMessages => [...previousMessages, {
+				'role': 'assistant',
+				'content': newAssistantMessage
+			}])
+			setCurrentAssistantMessage('');
+			setIsLoading(false);
+		}
+
+		return;
 		const promptUrlParam = encodeURIComponent(prompt);
 
 		const eventSource = new EventSource(

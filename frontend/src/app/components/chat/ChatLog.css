@@ -12,6 +12,10 @@
   animation: message-appear 100ms ease-in-out;
 }
 
+.assistant-message.new-message {
+  animation: none !important;
+}
+
 @keyframes message-appear {
   from {
     opacity: 0;
