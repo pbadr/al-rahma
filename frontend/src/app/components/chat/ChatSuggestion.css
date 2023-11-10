@@ -1,0 +1,3 @@
+.chat-suggestion-box {
+  @apply flex items-center p-5 rounded-xl bg-secondary font-bold cursor-pointer hover:bg-blue-900 transition-colors;
+}

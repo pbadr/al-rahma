@@ -4,15 +4,24 @@ import { Rubik } from "next/font/google";
 const rubik = Rubik({ weight: "400", subsets: ["arabic"] })
 
 import { ChatObject } from '../../chat/page';
+import ChatSuggestion from "./ChatSuggestion";
+import { Dispatch, SetStateAction } from "react";
 
 interface ChatLogProps {
   currentAssistantMessage: string;
   messages: ChatObject[];
+  setInputPrompt: Dispatch<SetStateAction<string>>;
+  onClickHandler: () => void;
 }
 
-export default function ChatLog({ currentAssistantMessage, messages }: ChatLogProps) {
+export default function ChatLog({ currentAssistantMessage, messages, setInputPrompt, onClickHandler }: ChatLogProps) {
   return (
     <section className="flex flex-col">
+      {
+        messages.length === 0 && (
+          <ChatSuggestion setInputPrompt={setInputPrompt} onClickHandler={onClickHandler} />
+        )
+      }
       {
         messages.map((message, index) => (
           <div

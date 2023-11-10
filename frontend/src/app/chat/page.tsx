@@ -41,6 +41,8 @@ export default function Chat() {
 	async function onClickHandler() {
 		const prompt = inputPrompt;
 
+		console.log(prompt);
+
 		setInputPrompt('');
 		setIsLoading(true);
 		setCurrentAssistantMessage('');
@@ -150,6 +152,8 @@ export default function Chat() {
 				<ChatLog
 					currentAssistantMessage={currentAssistantMessage}
 					messages={messages}
+					setInputPrompt={setInputPrompt}
+					onClickHandler={onClickHandler}
 				/>
 			</div>
 			<div className="chatinput-container fixed bottom-0 w-full px-5 h-[130px]">
