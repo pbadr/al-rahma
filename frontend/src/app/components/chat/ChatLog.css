@@ -6,7 +6,7 @@
 }
 
 .assistant-message {
-  @apply px-6 mt-3 py-3 bg-slate-500 self-start bg-gradient-to-b from-[#33487B] to-[#293D6E];
+  @apply px-6 py-3 bg-slate-500 self-start bg-gradient-to-b from-[#33487B] to-[#293D6E];
   max-width: 80%;
   border-radius: 0 25px 25px 25px;
   animation: message-appear 100ms ease-in-out;

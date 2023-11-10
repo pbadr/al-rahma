@@ -18,7 +18,7 @@ export default function ChatLog({ currentAssistantMessage, messages }: ChatLogPr
           <div
             key={index}
             className={
-              `whitespace-break-spaces ${message.role === 'user' ? 'user-message' : 'assistant-message'} ${index === messages.length - 1 && 'my-3'}`
+              `${rubik.className} whitespace-break-spaces my-2 ${message.role === 'user' ? 'user-message' : `assistant-message`}`
             }
           >
             <p>{message.content}</p>
