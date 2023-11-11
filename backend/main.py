@@ -7,7 +7,7 @@ from util import (
   get_chat_response, get_chat_stream_response, 
   ServerSentEvent, 
   config,
-  create_user, create_chat, add_message_to_chat
+  create_user, create_chat, add_message_to_chat, get_user_chats
 )
 
 from urllib.parse import unquote
@@ -40,6 +40,16 @@ async def index():
     "user_id": current_user.auth_id
   }, 200
 
+@app.route('/chat-history', methods=['GET'])
+@login_required
+async def chat_history():
+  user_id = current_user.auth_id
+  print(user_id)
+  user_chats = get_user_chats(user_id)
+
+  return {
+    "chats": user_chats
+  }, 200
 
 import asyncio
 @app.route('/sse', methods=['GET'])

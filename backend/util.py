@@ -129,13 +129,31 @@ def get_chat_history(chat_id):
 	
 	return chat_history
 
+def get_user_chats(user_id):
+	user = user_collection.find_one({
+		"_id": ObjectId(user_id)
+	})
+
+	user_chat_ids = user["chats"]
+	chats = []
+	for chat_id in user_chat_ids:
+		chat = chats_collection.find_one({
+			"_id": chat_id
+		})
+		chats.append({
+			"id": str(chat['_id']),
+			"messages": chat['messages']
+		})
+
+	print(chats)
+
+	return chats
+
 try:
 	client.admin.command('ping')
 	print("[util] Pinged deployment. Successfully connected to MongoDB")
 	print("[util] Database:", database.name)
 	print("[util] Users Collection:", user_collection.name)
 	print("[util] Chats Collection:", chats_collection.name)
-
-	get_chat_history('654f7ff8952f5c386008aab9')
 except Exception as e:
 	print(e)
