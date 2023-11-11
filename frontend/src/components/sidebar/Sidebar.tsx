@@ -2,6 +2,7 @@ import "./Sidebar.css";
 
 import Image from "next/image";
 import SidebarItem from "./item/SidebarItem";
+import SidebarItems from "./items/SidebarItems";
 
 interface SidebarProps {
   toggled: boolean;
@@ -27,12 +28,9 @@ export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
         </div>
         <div className="mt-6"> {/* User Chat History */}
           <h2 className="text-lg font-bold mb-2">User Chat History</h2>
-          <p className="mb-3 text-sm text-blue-300">Today</p>
           <div className="flex flex-col gap-5">
             {
-              [1, 2, 3, 4, 5].map((item, index) => (
-                <SidebarItem key={item} id={index} toggleSideBar={toggleSidebar} />
-              ))
+              <SidebarItems toggleSidebar={toggleSidebar} />
             }
           </div>
         </div>
