@@ -15,7 +15,7 @@ export default function Sidebar({ toggled }: SidebarProps) {
           <div className="flex items-center gap-3 text-xl font-bold">
             <Image
               className="hover:opacity-90 transition-opacity logo"
-              src="./logo.svg"
+              src="/images/logo.svg"
               alt="logo"
               width={50} height={50}
             />

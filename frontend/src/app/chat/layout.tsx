@@ -32,7 +32,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
         </div>
         <div className="logo">
           <Image
-            src="./logo.svg"
+            src="/images/logo.svg"
             alt="logo"
             width={40}
             height={40}

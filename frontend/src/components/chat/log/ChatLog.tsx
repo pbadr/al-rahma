@@ -3,7 +3,7 @@ import "./ChatLog.css";
 import { Rubik } from "next/font/google";
 const rubik = Rubik({ weight: "400", subsets: ["arabic"] })
 
-import { ChatObject } from '@/app/chat/page';
+import { ChatObject } from '@/app/chat/[[...id]]/page';
 import ChatSuggestion from "@/components/chat/suggestions/ChatSuggestion";
 import { Dispatch, SetStateAction } from "react";
 
