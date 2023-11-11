@@ -1,5 +1,5 @@
 .chat-container {
-  height: 100vh; /* calc(100vh - 50px) Viewport - Navbar height */
+  height: calc(100vh - 50px); /* calc(100vh - 50px) Viewport - Navbar height */
   width: calc(100% - 260px); /* Full width - aside */
   display: flex;
   flex-direction: column;
@@ -19,22 +19,4 @@
   padding: 20px;
   height: calc(100% - 130px); /* Entire height - chat input height */
   overflow-y: auto;
-}
-
-.chatlog-container::-webkit-scrollbar {
-  width: 5px;
-}
-
-.chatlog-container::-webkit-scrollbar-track {
-  @apply bg-primary;
-  border-radius: 5px;
-}
-
-.chatlog-container::-webkit-scrollbar-thumb {
-  @apply bg-secondary;
-  border-radius: 5px;
-}
-
-.chatlog-container::-webkit-scrollbar-thumb:hover {
-  @apply bg-[#33487B];
 }

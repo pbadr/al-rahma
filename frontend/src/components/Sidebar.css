@@ -11,6 +11,12 @@
 
 .sidebar {
   z-index: 1;
+  overflow-y: auto;
+}
+
+.sidebar {
+  transform: translateX(0);
+  transition: transform 200ms cubic-bezier(.55, .75, .50, 1);
 }
 
 @media (max-width: 768px) {

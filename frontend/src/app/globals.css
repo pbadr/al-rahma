@@ -7,6 +7,24 @@
   box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-primary;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-secondary;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#33487B];
+}
+
 .button {
   @apply bg-secondary w-40 py-1 rounded-2xl hover:bg-blue-600 hover:border-blue-600 transition-colors;
 }
