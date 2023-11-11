@@ -1,11 +1,11 @@
 .navbar {
   display: none;
-  height: 50px;
+  height: var(--navbar-height)
 }
 
 .overlay {
   width: 100%;
-  height: calc(100vh - 50px);
+  height: calc(100vh - var(--navbar-height));
   @apply absolute bg-primary opacity-90;
 }
 

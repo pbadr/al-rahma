@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --navbar-height: 50px;
+  --sidebar-width: 260px;
+  --chatinput-height: 120px;
+}
+
 * {
   color: white;
   box-sizing: border-box;

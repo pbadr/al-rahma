@@ -1,6 +1,6 @@
 .chat-container {
-  height: calc(100vh - 50px); /* calc(100vh - 50px) Viewport - Navbar height */
-  width: calc(100% - 260px); /* Full width - aside */
+  height: calc(100vh - var(--navbar-height)); /* calc(100vh - 50px) Viewport - Navbar height */
+  width: calc(100% - var(--sidebar-width)); /* Full width - aside */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,6 +16,10 @@
   max-width: 1000px;
   width: 100%;
   padding: 20px;
-  height: calc(100% - 130px); /* Entire height - chat input height */
+  height: calc(100% - var(--chatinput-height)); /* Entire height - chat input height */
   overflow-y: auto;
+}
+
+.chatinput-container {
+  height: var(--chatinput-height);
 }

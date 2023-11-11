@@ -160,7 +160,7 @@ export default function Chat({ params }: ChatParams) {
 					onClickHandler={onClickHandler}
 				/>
 			</div>
-			<div className="chatinput-container fixed bottom-0 h-[130px]">
+			<div className="chatinput-container fixed bottom-0">
 				<ChatInput
 					isLoading={isLoading}
 					prompt={inputPrompt}
