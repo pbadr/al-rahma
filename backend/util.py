@@ -68,3 +68,65 @@ class ServerSentEvent:
 		
 		message = f"{message}\r\n\r\n"
 		return message.encode('utf-8')
+
+
+from pymongo.mongo_client import MongoClient
+from pymongo.database import Database
+from pymongo.collection import Collection
+
+from bson import ObjectId
+
+uri = config['MONGODB_URI']
+
+client = MongoClient(uri)
+database: Database = client['alrahma']
+user_collection: Collection = database['users']
+chats_collection: Collection = database['chats']
+
+def create_user():
+	user = user_collection.insert_one({
+		"chats": []
+	})
+
+	return user
+
+def create_chat(user_id):
+	chat = chats_collection.insert_one({
+		"user_id": ObjectId(user_id),
+		"messages": []
+	})
+
+	user_collection.find_one_and_update({"_id": ObjectId(user_id)},
+		{
+			'$set': { 'chats': [chat.inserted_id]}
+		}
+	)
+
+	print("Created new chat and added to user", user_id)
+
+	return chat
+
+def add_message_to_chat(chat_id, message):
+	chat = chats_collection.find_one({
+		"_id": ObjectId(chat_id)
+	})
+
+	new_messages = chat["messages"] + [message]
+	chats_collection.find_one_and_update({"_id": ObjectId(chat_id)},
+		{
+			'$set': { 'messages': new_messages}
+		}
+	)
+
+	return message
+
+try:
+	client.admin.command('ping')
+	print("[util] Pinged deployment. Successfully connected to MongoDB")
+	print("[util] Database:", database.name)
+	print("[util] Users Collection:", user_collection.name)
+	print("[util] Chats Collection:", chats_collection.name)
+
+except Exception as e:
+	print(e)
+

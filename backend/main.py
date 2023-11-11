@@ -3,7 +3,12 @@ import json
 from quart import Quart, request, abort, make_response
 from quart_cors import cors
 
-from util import get_chat_response, get_chat_stream_response, ServerSentEvent, config
+from util import (
+  get_chat_response, get_chat_stream_response, 
+  ServerSentEvent, 
+  config,
+  create_user, create_chat, add_message_to_chat
+)
 
 from urllib.parse import unquote
 
@@ -49,17 +54,58 @@ async def sse():
       "error": "Please pass in a prompt"
     }, 400
   
+  
+  
   prompt = unquote(raw_prompt)
   response_stream = get_chat_stream_response(prompt)
 
+  chat_id: str | None = request.args.get("chatId", None)
+  chat = None
+  if not chat_id:
+    chat = create_chat(current_user.auth_id)
+    chat_id = str(chat.inserted_id)
+
+    message = add_message_to_chat(
+      chat_id, 
+      {
+        "role": "user",
+        "content": prompt
+      }
+    )
+    if message:
+      print(f"Inserted user message to {chat_id}")
+  else:
+    message = add_message_to_chat(
+      chat_id, 
+      {
+        "role": "user",
+        "content": prompt
+      }
+    )
+    if message:
+      print(f"Inserted user message to {chat_id}")
+
   async def send_events():
+    assistant_message = ""
     for index, chunk_message in enumerate(response_stream):
       response_content = chunk_message
       if not chunk_message:
+        message = add_message_to_chat(
+          chat_id,
+          {
+            "role": "assistant",
+            "content": assistant_message
+          }
+        )
+        if message:
+          print(f"Inserted assistant message to {chat_id}")
         response_content = "!end"
-      
+
+      assistant_message += response_content
+
       data = json.dumps({
-        "token": response_content
+        "token": response_content,
+        "chat_id": chat_id
       })
 
       event = ServerSentEvent(data, event='message', id=index)
@@ -82,10 +128,13 @@ async def sse():
 
 @app.route('/login', methods=['POST'])
 async def login():
-  login_user(AuthUser(1), remember=True)
+  user = create_user()
+  user_id = str(user.inserted_id)
+  login_user(AuthUser(user_id), remember=True)
 
   return {
-    "message": "Logged in"
+    "message": "Logged in",
+    "user_id": user_id,
   }, 200
 
 @app.route('/logout')
