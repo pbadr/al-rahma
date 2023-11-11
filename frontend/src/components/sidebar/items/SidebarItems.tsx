@@ -18,7 +18,6 @@ interface Chat {
 
 export default function SidebarItems({ toggleSidebar }: SidebarItemsProps) {
   const [chatHistory, setChatHistory] = useState<Chat[]>([]);
-  const userId = localStorage.getItem('userId');
   
   useEffect(() => {
     const getUserChats = async () => {
