@@ -36,6 +36,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
             alt="logo"
             width={40}
             height={40}
+            style={{ width: 40, height: 40 }}
           />
         </div>
       </nav>

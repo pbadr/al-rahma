@@ -18,6 +18,7 @@ export default function Sidebar({ toggled }: SidebarProps) {
               src="/images/logo.svg"
               alt="logo"
               width={50} height={50}
+              style={{ width: 40, height: 40 }}
             />
             <h1>Al-Rahma</h1>
           </div>
