@@ -1,0 +1,10 @@
+.chat-history-box {
+  @apply flex items-center gap-2 text-sm rounded-lg bg-primary py-4 px-2 cursor-pointer hover:bg-secondary transition-colors;
+}
+
+.chat-history-box p {
+  max-width: 184px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

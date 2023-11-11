@@ -1,6 +1,6 @@
 .chat-container {
   height: 100vh; /* calc(100vh - 50px) Viewport - Navbar height */
-  width: 100%;
+  width: calc(100% - 260px); /* Full width - aside */
   display: flex;
   flex-direction: column;
   align-items: center;
