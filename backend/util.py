@@ -19,15 +19,15 @@ def get_chat_response(prompt):
 
 	return response['choices'][0]['message']['content']
 
-def get_chat_stream_response(prompt):
+def get_chat_stream_response(chat_id):
+	chat_history = get_chat_history(chat_id)
+	messages = [config['SYSTEM_MESSAGE']] + chat_history
+	
 	response = openai.ChatCompletion.create(
 		model=config['BASE_MODEL'],
 		temperature=config['TEMPERATURE'],
 		max_tokens=config['MAX_TOKENS'],
-		messages=[
-			config['SYSTEM_MESSAGE'],
-			{"role": "user", "content": prompt},
-		],
+		messages=messages,
 		stream=True
 	)
 
@@ -120,6 +120,15 @@ def add_message_to_chat(chat_id, message):
 
 	return message
 
+def get_chat_history(chat_id):
+	chat = chats_collection.find_one({
+		"_id": ObjectId(chat_id)
+	})
+
+	chat_history = chat["messages"]
+	
+	return chat_history
+
 try:
 	client.admin.command('ping')
 	print("[util] Pinged deployment. Successfully connected to MongoDB")
@@ -127,6 +136,6 @@ try:
 	print("[util] Users Collection:", user_collection.name)
 	print("[util] Chats Collection:", chats_collection.name)
 
+	get_chat_history('654f7ff8952f5c386008aab9')
 except Exception as e:
 	print(e)
-

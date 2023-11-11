@@ -57,7 +57,6 @@ async def sse():
   
   
   prompt = unquote(raw_prompt)
-  response_stream = get_chat_stream_response(prompt)
 
   chat_id: str | None = request.args.get("chatId", None)
   chat = None
@@ -85,6 +84,7 @@ async def sse():
     if message:
       print(f"Inserted user message to {chat_id}")
 
+  response_stream = get_chat_stream_response(chat_id)
   async def send_events():
     assistant_message = ""
     for index, chunk_message in enumerate(response_stream):
