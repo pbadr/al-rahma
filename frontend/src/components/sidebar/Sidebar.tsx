@@ -1,7 +1,6 @@
 import "./Sidebar.css";
 
 import Image from "next/image";
-import SidebarItem from "./item/SidebarItem";
 import SidebarItems from "./items/SidebarItems";
 import { useRouter } from "next/navigation";
 
@@ -27,7 +26,10 @@ export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
             <h1>Al-Rahma</h1>
           </div>
           <p className="text-sm">Your intelligent <b>Quranic</b> assistant</p>
-          <button onClick={() => router.replace('/chat')} className="button mt-3 !w-full">New Chat</button>
+          <button onClick={() => {
+            toggleSidebar();
+            router.replace('/chat');
+          }} className="button mt-3 !w-full">New Chat</button>
         </div>
         <div className="mt-6"> {/* User Chat History */}
           <h2 className="text-lg font-bold mb-2">User Chat History</h2>

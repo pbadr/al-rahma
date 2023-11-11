@@ -12,7 +12,8 @@ import { Chat, UserContextType } from "@/types/chat";
 // import { simulateResponse } from "@/utils/test";
 
 interface ServerResponse {
-	token: string
+	token: string;
+	"chat_id": string;
 }
 
 type ChatParams = {
@@ -56,14 +57,14 @@ export default function Chat({ params }: ChatParams) {
 
 		try {
 			// Set your own message on the messages list
-			const newMessages = [...messages, {
+			let newMessages = [...messages, {
 				role: "user",
 				content: prompt
 			}] as Chat[];
 
 			setMessages(newMessages);
 
-			await streamMessage(prompt);
+			await streamMessage(prompt, newMessages);
 		} catch (error) {
 			console.error(error);
 			setIsLoading(false);
@@ -74,40 +75,15 @@ export default function Chat({ params }: ChatParams) {
 		setInputPrompt(event.target.value);
 	}
 
-	async function streamMessage(prompt: string) {
-		// {
-		// 	// Test streaming tokens
-		// 	let newAssistantMessage = '';
-		// 	for await (const token of simulateResponse()) {
-		// 		setCurrentAssistantMessage(
-		// 			previousMessage => {
-		// 				console.log(previousMessage, newAssistantMessage)
-		// 				if (previousMessage === '') {
-		// 					newAssistantMessage = token;
-		// 					return token;
-		// 				}
-		
-		// 				newAssistantMessage = previousMessage + token;
-		// 				return previousMessage + token;
-		// 			}
-		// 		)
-		// 	}
-
-		// 	console.log(newAssistantMessage);
-		// 	setMessages(previousMessages => [...previousMessages, {
-		// 		'role': 'assistant',
-		// 		'content': newAssistantMessage
-		// 	}])
-		// 	setCurrentAssistantMessage('');
-		// 	setIsLoading(false);
-		// }
-
-		// return;
-
+	async function streamMessage(prompt: string, newMessages: Chat[]) {
 		const promptUrlParam = encodeURIComponent(prompt);
 
+		let chatIdUrlParam = ''
+		if (params.id)
+			chatIdUrlParam = `&chatId=${params.id}`
+			
 		const eventSource = new EventSource(
-			`${process.env.API_ROUTE}/sse?prompt=${promptUrlParam}`,
+			`${process.env.API_ROUTE}/sse?prompt=${promptUrlParam}${chatIdUrlParam}`,
 			{ withCredentials: true }
 		)
 
@@ -123,12 +99,17 @@ export default function Chat({ params }: ChatParams) {
 				console.log(newAssistantMessage);
 				// Set current assistant message to empty and append the finished assistant message to the messages list
 				setCurrentAssistantMessage('');
-				const newMessages = [...messages, {
+				newMessages = [...newMessages, {
 					role: "assistant",
 					content: newAssistantMessage
 				}] as Chat[];
-
+				
 				setMessages(newMessages);
+
+				// If new chat, navigate to chatId
+				if (!params.id)
+					router.replace(`/chat/${data.chat_id}`)
+
 				return;
 			}
 			
