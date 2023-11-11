@@ -6,6 +6,12 @@
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  .chat-container {
+    width: 100%;
+  }
+}
+
 .chatlog-container {
   max-width: 1000px;
   width: 100%;

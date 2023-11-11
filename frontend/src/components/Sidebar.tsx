@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Sidebar() {
   return (
-    <aside className="flex flex-col justify-between w-[260px] bg-[#18233D] p-4">
+    <aside className="sidebar fixed md:relative flex flex-col justify-between w-[260px] h-screen bg-[#18233D] p-4">
       <div> {/* Top section */}
         <div> {/* Information */}
           <div className="flex items-center gap-3 text-xl font-bold">
