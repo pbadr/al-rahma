@@ -1,6 +1,6 @@
 export interface UserContextType {
   chatHistory: Chat[];
-  getChat: (chatId: string) => Promise<Chat[]>;
+  getChat: (chatId: string) => Promise<ChatObject[]>;
 }
 
 export interface ChatObject {

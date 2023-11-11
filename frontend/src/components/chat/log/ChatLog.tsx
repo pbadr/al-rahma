@@ -5,7 +5,7 @@ const rubik = Rubik({ weight: "400", subsets: ["arabic"] })
 
 import ChatSuggestion from "@/components/chat/suggestions/ChatSuggestion";
 import { useEffect, createRef, Dispatch, SetStateAction } from "react";
-import { ChatObject } from "@/types/chat";
+import { Chat, ChatObject } from "@/types/chat";
 
 interface ChatLogProps {
   currentAssistantMessage: string;

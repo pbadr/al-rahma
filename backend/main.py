@@ -44,7 +44,6 @@ async def index():
 @login_required
 async def chat_history():
   user_id = current_user.auth_id
-  print(user_id)
   user_chats = get_user_chats(user_id)
 
   return {

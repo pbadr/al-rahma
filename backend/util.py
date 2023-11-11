@@ -145,8 +145,6 @@ def get_user_chats(user_id):
 			"messages": chat['messages']
 		})
 
-	print(chats)
-
 	return chats
 
 try:

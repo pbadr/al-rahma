@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import ChatInput from "@/components/chat/input/ChatInput";
 import ChatLog from "@/components/chat/log/ChatLog";
 import { UserContext } from "@/context/UserContext";
-import { Chat, UserContextType } from "@/types/chat";
+import { Chat, ChatObject, UserContextType } from "@/types/chat";
 // import { simulateResponse } from "@/utils/test";
 
 interface ServerResponse {
@@ -33,8 +33,9 @@ export default function Chat({ params }: ChatParams) {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [inputPrompt, setInputPrompt] = useState<string>('');
 
-	const [messages, setMessages] = useState<Chat[]>([]);
+	const [messages, setMessages] = useState<ChatObject[]>([]);
 	const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
+
 	
 	useEffect(() => {
 		const fetchChat = async () => {
@@ -44,7 +45,7 @@ export default function Chat({ params }: ChatParams) {
 		if (params.id) {
 			fetchChat();
 		}
-	}, [params, getChat]);
+	}, []);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;
@@ -60,7 +61,7 @@ export default function Chat({ params }: ChatParams) {
 			let newMessages = [...messages, {
 				role: "user",
 				content: prompt
-			}] as Chat[];
+			}] as ChatObject[];
 
 			setMessages(newMessages);
 
@@ -75,7 +76,7 @@ export default function Chat({ params }: ChatParams) {
 		setInputPrompt(event.target.value);
 	}
 
-	async function streamMessage(prompt: string, newMessages: Chat[]) {
+	async function streamMessage(prompt: string, newMessages: ChatObject[]) {
 		const promptUrlParam = encodeURIComponent(prompt);
 
 		let chatIdUrlParam = ''
@@ -90,25 +91,22 @@ export default function Chat({ params }: ChatParams) {
 		let newAssistantMessage = '';
 		eventSource.onmessage = (event) => {
 			const data: ServerResponse = JSON.parse(event.data);
-			console.log('Received token:', data.token)
+			// If new chat, navigate to chatId
+			if (!params.id)
+				router.replace(`/chat/${data.chat_id}`)
 
 			if (data.token === '!end') {
 				eventSource.close();
 				setIsLoading(false);
 				
-				console.log(newAssistantMessage);
 				// Set current assistant message to empty and append the finished assistant message to the messages list
 				setCurrentAssistantMessage('');
 				newMessages = [...newMessages, {
 					role: "assistant",
 					content: newAssistantMessage
-				}] as Chat[];
+				}] as ChatObject[];
 				
 				setMessages(newMessages);
-
-				// If new chat, navigate to chatId
-				if (!params.id)
-					router.replace(`/chat/${data.chat_id}`)
 
 				return;
 			}
