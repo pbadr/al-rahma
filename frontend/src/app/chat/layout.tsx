@@ -12,6 +12,9 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   const [sidebarToggled, setSidebarToggled] = useState(false);
 
   function toggleSidebar() {
+    if (window.innerWidth > 768)
+      return
+
     setSidebarToggled(toggled => !toggled);
   }
 
