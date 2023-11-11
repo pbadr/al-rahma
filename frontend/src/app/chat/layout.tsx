@@ -3,7 +3,7 @@
 import Image from "next/image";
 import "./layout.css";
 
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import { useEffect, useState } from "react";
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {

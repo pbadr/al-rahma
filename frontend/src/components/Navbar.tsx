@@ -9,7 +9,7 @@ export default function Navbar() {
       <Link href="/">
         <Image
           className="hover:opacity-90 transition-opacity logo"
-          src="./logo.svg"
+          src="logo.svg"
           alt="logo"
           width={50} height={50} />
       </Link>
