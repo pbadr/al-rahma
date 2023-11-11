@@ -23,7 +23,7 @@ export default function ChatSuggestion({ setInputPrompt, onClickHandler }: ChatS
         </svg>
         <h2 className="text-lg font-bold mb-5">Get started with some suggestions</h2>
       </div>
-      <div className="grid grid-cols-2 gap-5 text-sm">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
         <div onClick={handleSuggestionBoxOnClick} className="chat-suggestion-box">
           <p>What is the meaning of life? →</p>
         </div>
