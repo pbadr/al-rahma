@@ -9,6 +9,10 @@
   text-overflow: ellipsis;
 }
 
+.sidebar {
+  z-index: 1;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
