@@ -1,0 +1,29 @@
+.navbar {
+  display: none;
+  height: 50px;
+}
+
+.overlay {
+  width: 100%;
+  height: calc(100vh - 50px);
+  @apply absolute bg-primary opacity-90;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    @apply flex justify-center items-center bg-secondary;
+  }
+
+  .navbar .hamburger {
+    width: 50px;
+    padding-left: 20px;
+    cursor: pointer;
+  }
+
+  .navbar .logo {
+    display: flex;
+    width: 100%;
+    padding-right: 50px;
+    justify-content: center;
+  }
+}

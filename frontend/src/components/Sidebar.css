@@ -10,11 +10,15 @@
 }
 
 .sidebar {
-  z-index: 1;
+  height: 100vh;
+  transition: transform 200ms cubic-bezier(.55, .75, .50, 1);
   overflow-y: auto;
+  transform: translateX(0);
+  z-index: 2;
 }
 
-.sidebar {
+.sidebar.toggled {
+  height: calc(100vh - 50px);
   transform: translateX(0);
   transition: transform 200ms cubic-bezier(.55, .75, .50, 1);
 }
