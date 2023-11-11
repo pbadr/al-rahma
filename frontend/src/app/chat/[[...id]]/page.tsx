@@ -3,6 +3,7 @@
 import "./page.css";
 
 import { ChangeEvent, createRef, useEffect, useState } from "react"
+import { useRouter } from "next/navigation";
 
 import ChatInput from "@/components/chat/input/ChatInput";
 import ChatLog from "@/components/chat/log/ChatLog";
@@ -17,9 +18,15 @@ export interface ChatObject {
   content: string;
 }
 
+type ChatParams = {
+  params: {
+    id: string;
+  };
+};
 
-export default function Chat() {
+export default function Chat({ params }: ChatParams) {
 	// Scrolling behavior
+	const router = useRouter();
 	const ref = createRef<HTMLDivElement>();
 
 	const [error, setError] = useState<string>('');
@@ -30,13 +37,10 @@ export default function Chat() {
 	const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
 	
 	useEffect(() => {
-		if (ref.current) {
-			ref.current.scrollTo({
-				top: ref.current.scrollHeight,
-				behavior: "smooth"
-			});
+		if (params.id) {
+			console.log(params);
 		}
-	}, [ref]);
+	}, [params]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;
