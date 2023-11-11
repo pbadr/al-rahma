@@ -2,20 +2,17 @@
 
 import "./page.css";
 
-import { ChangeEvent, createRef, useEffect, useState } from "react"
+import { ChangeEvent, createRef, useState, useEffect, useContext } from "react"
 import { useRouter } from "next/navigation";
 
 import ChatInput from "@/components/chat/input/ChatInput";
 import ChatLog from "@/components/chat/log/ChatLog";
+import { UserContext } from "@/context/UserContext";
+import { Chat, UserContextType } from "@/types/chat";
 // import { simulateResponse } from "@/utils/test";
 
 interface ServerResponse {
 	token: string
-}
-
-export interface ChatObject {
-  role: string;
-  content: string;
 }
 
 type ChatParams = {
@@ -25,6 +22,8 @@ type ChatParams = {
 };
 
 export default function Chat({ params }: ChatParams) {
+	const { getChat } = useContext(UserContext) as UserContextType;
+
 	// Scrolling behavior
 	const router = useRouter();
 	const ref = createRef<HTMLDivElement>();
@@ -33,14 +32,18 @@ export default function Chat({ params }: ChatParams) {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [inputPrompt, setInputPrompt] = useState<string>('');
 
-	const [messages, setMessages] = useState<ChatObject[]>([]);
+	const [messages, setMessages] = useState<Chat[]>([]);
 	const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
 	
 	useEffect(() => {
-		if (params.id) {
-			console.log(params);
+		const fetchChat = async () => {
+			const messages = await getChat(params.id);
+			setMessages(messages);
 		}
-	}, [params]);
+		if (params.id) {
+			fetchChat();
+		}
+	}, [params, getChat]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;
@@ -53,10 +56,12 @@ export default function Chat({ params }: ChatParams) {
 
 		try {
 			// Set your own message on the messages list
-			setMessages(previousMessages => [...previousMessages, {
+			const newMessages = [...messages, {
 				role: "user",
 				content: prompt
-			}]);
+			}] as Chat[];
+
+			setMessages(newMessages);
 
 			await streamMessage(prompt);
 		} catch (error) {
@@ -118,11 +123,12 @@ export default function Chat({ params }: ChatParams) {
 				console.log(newAssistantMessage);
 				// Set current assistant message to empty and append the finished assistant message to the messages list
 				setCurrentAssistantMessage('');
-				setMessages(previousMessages => [...previousMessages, {
+				const newMessages = [...messages, {
 					role: "assistant",
 					content: newAssistantMessage
-				}]);
+				}] as Chat[];
 
+				setMessages(newMessages);
 				return;
 			}
 			

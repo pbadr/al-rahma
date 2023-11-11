@@ -1,9 +1,7 @@
-import { Chat, ChatContextType } from "@/types/chat";
+import { Chat, UserContextType } from "@/types/chat";
 import { useState, useEffect, createContext, ReactNode } from "react";
 
-export const UserContext = createContext<ChatContextType>({
-  chatHistory: []
-});
+export const UserContext = createContext<UserContextType | null>(null);
 
 export default function UserProvider({ children }: { children: ReactNode }) {
   const [chatHistory, setChatHistory] = useState<Chat[]>([]);
@@ -26,8 +24,18 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     getUserChats();
   }, []);
 
+  const getChat = async (chatId: string) => {
+    const response = await fetch(`${process.env.API_ROUTE}/chat/${chatId}`, {
+      credentials: 'include',
+      method: 'GET',
+    })
+    const data = await response.json();
+
+    return data.chat;
+  }
+
   return (
-    <UserContext.Provider value={{ chatHistory }}>
+    <UserContext.Provider value={{ chatHistory, getChat }}>
       {children}
     </UserContext.Provider>
   )
