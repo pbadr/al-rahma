@@ -98,7 +98,7 @@ def create_chat(user_id):
 
 	user_collection.find_one_and_update({"_id": ObjectId(user_id)},
 		{
-			'$set': { 'chats': [chat.inserted_id]}
+			'$push': { 'chats': chat.inserted_id}
 		}
 	)
 
