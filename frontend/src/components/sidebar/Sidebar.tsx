@@ -5,9 +5,10 @@ import SidebarItem from "./item/SidebarItem";
 
 interface SidebarProps {
   toggled: boolean;
+  toggleSidebar: () => void;
 }
 
-export default function Sidebar({ toggled }: SidebarProps) {
+export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
   return (
     <aside className={`sidebar ${toggled && 'toggled'} absolute md:relative flex flex-col justify-between w-[260px] bg-[#18233D] p-4`}>
       <div> {/* Top section */}
@@ -30,7 +31,7 @@ export default function Sidebar({ toggled }: SidebarProps) {
           <div className="flex flex-col gap-5">
             {
               [1, 2, 3, 4, 5].map((item, index) => (
-                <SidebarItem key={item} id={index} />
+                <SidebarItem key={item} id={index} toggleSideBar={toggleSidebar} />
               ))
             }
           </div>

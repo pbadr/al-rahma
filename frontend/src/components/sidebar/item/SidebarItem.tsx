@@ -2,11 +2,12 @@ import Link from "next/link"
 
 interface SidebarItemProps {
   id: number;
+  toggleSideBar: () => void;
 }
 
-export default function SidebarItem({ id }: SidebarItemProps) {
+export default function SidebarItem({ id, toggleSideBar }: SidebarItemProps) {
   return (
-    <Link href={`/chat/${id}`}>
+    <Link href={`/chat/${id}`} onClick={toggleSideBar}>
       <div className="flex items-center gap-2 text-sm rounded-lg bg-primary py-4 px-3 cursor-pointer hover:bg-secondary transition-colors">
         <ChatHistoryIcon />
         <p className="max-w-[184px] whitespace-nowrap overflow-hidden text-ellipsis">What is the meaning of life?</p>

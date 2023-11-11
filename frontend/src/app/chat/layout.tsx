@@ -48,7 +48,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
         </div>
       </nav>
       <div className="flex">
-        <Sidebar toggled={sidebarToggled} />
+        <Sidebar toggled={sidebarToggled} toggleSidebar={toggleSidebar} />
         {
           sidebarToggled && (
             <div onClick={() => setSidebarToggled(false)} className="overlay"></div>
