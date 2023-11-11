@@ -121,6 +121,7 @@ async def sse():
       assistant_message += response_content
 
       data = json.dumps({
+        "index": index,
         "token": response_content,
         "chat_id": chat_id
       })

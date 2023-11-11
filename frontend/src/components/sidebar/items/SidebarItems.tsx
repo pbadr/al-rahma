@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useEffect, useContext } from "react";
 
 import SidebarItem from "../item/SidebarItem";
 
@@ -15,6 +15,9 @@ export default function SidebarItems({ toggleSidebar }: SidebarItemsProps) {
 
   return (
     <>
+      {
+        chatHistory.length === 0 && <p className="text-sm opacity-80">No history</p>
+      }
       {
         chatHistory.map((chat) => (
           <SidebarItem

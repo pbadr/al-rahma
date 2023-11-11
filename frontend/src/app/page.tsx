@@ -37,7 +37,7 @@ export default function Home() {
   }
 
   return (
-    <main className="mt-14 flex flex-col items-center justify-center text-center appear">
+    <main className="h-screen flex flex-col items-center justify-center text-center appear">
       <div className="flex flex-col items-center gap-2 tracking-tighter">
         <h1 className="text-3xl font-bold">Al-Rahma</h1>
         <h1 className="text-3xl font-bold">الرحمة</h1>

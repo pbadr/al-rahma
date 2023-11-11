@@ -25,16 +25,17 @@ export default function ChatInput({ prompt, isLoading, handlePromptChange, onCli
       <div className="mb-3 p-2 lg:p-0">
         <div className="flex relative">
           <textarea
-            className="bg-[#18233D] text-white rounded-xl lg:rounded-3xl focus:border-0 focus:outline-0 pl-5 py-3 pr-14 w-full max-h-80 overflow-auto resize-none"
+            className="bg-[#18233D] text-white rounded-xl lg:rounded-3xl focus:border-0 focus:outline-0 pl-5 py-3 pr-14 w-full max-h-80 overflow-auto resize-none disabled:opacity-40 disabled:cursor-not-allowed"
             rows={1}
             name="prompt"
             value={prompt}
             onChange={handlePromptChange}
             onKeyDown={handleKeyDown}
             autoComplete="off"
+            disabled={isLoading}
           />
           <button
-            className={`absolute right-0 bottom-0 mr-3 mb-2 opacity-50 ${prompt.length > 0 && 'bg-secondary !opacity-100'} p-1 px-2 rounded-full transition-colors`}
+            className={`absolute right-0 bottom-0 mr-3 mb-2 opacity-50 ${prompt.length > 0 && 'bg-secondary !opacity-100'} p-1 px-2 rounded-full transition-colors disabled:cursor-not-allowed`}
             disabled={isLoading || prompt.length === 0}
             onClick={() => onClickHandler()}
           >

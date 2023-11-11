@@ -12,6 +12,7 @@ import { Chat, ChatObject, UserContextType } from "@/types/chat";
 // import { simulateResponse } from "@/utils/test";
 
 interface ServerResponse {
+	index: number;
 	token: string;
 	"chat_id": string;
 }
@@ -23,10 +24,9 @@ type ChatParams = {
 };
 
 export default function Chat({ params }: ChatParams) {
-	const { getChat } = useContext(UserContext) as UserContextType;
+	const { getChat, getUserChats } = useContext(UserContext) as UserContextType;
 
 	// Scrolling behavior
-	const router = useRouter();
 	const ref = createRef<HTMLDivElement>();
 
 	const [error, setError] = useState<string>('');
@@ -45,7 +45,7 @@ export default function Chat({ params }: ChatParams) {
 		if (params.id) {
 			fetchChat();
 		}
-	}, []);
+	}, [getChat, params.id]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;
@@ -91,9 +91,11 @@ export default function Chat({ params }: ChatParams) {
 		let newAssistantMessage = '';
 		eventSource.onmessage = (event) => {
 			const data: ServerResponse = JSON.parse(event.data);
-			// If new chat, navigate to chatId
-			if (!params.id)
-				router.replace(`/chat/${data.chat_id}`)
+			// If new chat, replace chatId URL without rerender
+			if (data.index === 1) {
+				getUserChats();
+				window.history.replaceState(null, '', `/chat/${data.chat_id}`)
+			}
 
 			if (data.token === '!end') {
 				eventSource.close();

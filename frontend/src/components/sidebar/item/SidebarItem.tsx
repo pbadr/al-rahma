@@ -9,7 +9,7 @@ interface SidebarItemProps {
 export default function SidebarItem({ id, firstMessage, toggleSideBar }: SidebarItemProps) {
   return (
     <Link href={`/chat/${id}`} onClick={toggleSideBar}>
-      <div className="appear flex items-center gap-2 text-sm rounded-lg bg-primary py-4 px-3 cursor-pointer hover:bg-secondary transition-colors">
+      <div title={firstMessage} className="appear flex items-center gap-2 text-sm rounded-lg bg-primary py-4 px-3 cursor-pointer hover:bg-secondary transition-colors">
         <ChatHistoryIcon />
         <p className="max-w-[176px] whitespace-nowrap overflow-hidden text-ellipsis">{firstMessage}</p>
       </div>
