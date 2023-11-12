@@ -10,12 +10,12 @@ interface SidebarItemProps {
   toggleSideBar: () => void;
 }
 
-export default function SidebarItem({ id, firstMessage }: SidebarItemProps) {
+export default function SidebarItem({ id, firstMessage, toggleSideBar }: SidebarItemProps) {
   const [hovered, setHovered] = useState(false);
 
   return (
     <div className="relative" onMouseOver={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <Link href={`/chat/${id}`}>
+      <Link href={`/chat/${id}`} onClick={toggleSideBar}>
         <div
           title={firstMessage}
           className="relative appear flex items-center gap-2 text-sm rounded-lg bg-primary py-4 px-3 cursor-pointer hover:bg-secondary transition-colors"

@@ -41,18 +41,23 @@ export default function Chat({ params }: ChatParams) {
 	
 	useEffect(() => {
 		const fetchChat = async () => {
+			console.log("Fetching chat..");
 			try {
 				const messages = await getChat(params.id);
 				setMessages(messages);
 			} catch (error) {
 				console.log("Chat not found, redirecting to /chat")
+				setMessages([]);
 				router.replace('/chat');
 			}
 		}
 		if (params.id) {
 			setChatIdUrlParam(`&chatId=${params.id}`)
-			fetchChat();
 		}
+
+		if (chatIdUrlParam !== '')
+			fetchChat();
+
 	}, [getChat, params.id, chatIdUrlParam, router]);
 
 	async function onClickHandler() {
@@ -87,21 +92,21 @@ export default function Chat({ params }: ChatParams) {
 	async function streamMessage(prompt: string, newMessages: ChatObject[]) {
 		const promptUrlParam = encodeURIComponent(prompt);
 
-		{ // Testing
-			let newAssistantTestMessage = '';
-			for await (const data of simulateResponse()) {
-				newAssistantTestMessage += data;
-				setCurrentAssistantMessage(newAssistantTestMessage)
-			}
+		// { // Testing
+		// 	let newAssistantTestMessage = '';
+		// 	for await (const data of simulateResponse()) {
+		// 		newAssistantTestMessage += data;
+		// 		setCurrentAssistantMessage(newAssistantTestMessage)
+		// 	}
 		
-			setCurrentAssistantMessage('');
-			setMessages(prev => [...prev, {
-				"role": "assistant",
-				"content": newAssistantTestMessage
-			}]);
-			setIsLoading(false);
-		}
-		return;
+		// 	setCurrentAssistantMessage('');
+		// 	setMessages(prev => [...prev, {
+		// 		"role": "assistant",
+		// 		"content": newAssistantTestMessage
+		// 	}]);
+		// 	setIsLoading(false);
+		// }
+		// return;
 
 		const eventSource = new EventSource(
 			`${process.env.API_ROUTE}/sse?prompt=${promptUrlParam}${chatIdUrlParam}`,
@@ -113,6 +118,7 @@ export default function Chat({ params }: ChatParams) {
 			const data: ServerResponse = JSON.parse(event.data);
 			// If new chat, replace chatId URL without rerender
 			if (data.index === 1) {
+				console.log(data.chat_id)
 				getUserChats();
 				setChatIdUrlParam(`&chatId=${data.chat_id}`);
 				window.history.replaceState(null, '', `/chat/${data.chat_id}`)
