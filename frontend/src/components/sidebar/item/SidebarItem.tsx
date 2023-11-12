@@ -1,6 +1,7 @@
 import { UserContext } from "@/context/UserContext";
 import { UserContextType } from "@/types/chat";
 import Link from "next/link"
+import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 
 interface SidebarItemProps {
@@ -37,6 +38,8 @@ function ChatHistoryIcon() {
 }
 
 function DeleteChatHistoryIcon({ chatId }: { chatId: string }) {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const { deleteChat } = useContext(UserContext) as UserContextType;
@@ -45,6 +48,8 @@ function DeleteChatHistoryIcon({ chatId }: { chatId: string }) {
     setIsLoading(true);
     await deleteChat(chatId);
     setIsLoading(false);
+
+    router.replace('/chat')
   }
 
   return (

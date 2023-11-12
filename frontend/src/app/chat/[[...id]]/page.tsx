@@ -3,7 +3,6 @@
 import "./page.css";
 
 import { ChangeEvent, createRef, useState, useEffect, useContext } from "react"
-import { useRouter } from "next/navigation";
 
 import ChatInput from "@/components/chat/input/ChatInput";
 import ChatLog from "@/components/chat/log/ChatLog";
@@ -49,7 +48,7 @@ export default function Chat({ params }: ChatParams) {
 			setChatIdUrlParam(`&chatId=${params.id}`)
 			fetchChat();
 		}
-	}, [getChat, params.id]);
+	}, [getChat, params.id, chatIdUrlParam]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;
