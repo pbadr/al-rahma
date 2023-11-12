@@ -54,12 +54,12 @@ export default function Chat({ params }: ChatParams) {
 				router.replace('/chat');
 			}
 		}
+		
 		if (params.id) {
 			setChatIdUrlParam(`&chatId=${params.id[0]}`)
 			fetchChat();
 		}
-
-	}, [getChat, params.id, router, setActiveChatMessages, setActiveChatId, activeChatId, setChatIdUrlParam]);
+	}, [getChat, params.id, router, setActiveChatMessages, setActiveChatId, setChatIdUrlParam]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;
