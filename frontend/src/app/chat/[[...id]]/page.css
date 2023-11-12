@@ -12,14 +12,6 @@
   }
 }
 
-.chatlog-container {
-  max-width: 1000px;
-  width: 100%;
-  padding: 20px;
-  height: calc(100% - var(--chatinput-height)); /* Entire height - chat input height */
-  overflow-y: auto;
-}
-
 .chatinput-container {
   height: var(--chatinput-height);
 }

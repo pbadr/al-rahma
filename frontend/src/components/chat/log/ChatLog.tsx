@@ -1,11 +1,13 @@
 import "./ChatLog.css";
 
+import { UIEvent, useState } from "react";
+
 import { Rubik } from "next/font/google";
 const rubik = Rubik({ weight: "400", subsets: ["arabic"] })
 
 import ChatSuggestion from "@/components/chat/suggestions/ChatSuggestion";
-import { useEffect, createRef, Dispatch, SetStateAction } from "react";
-import { Chat, ChatObject } from "@/types/chat";
+import { useEffect, createRef, Dispatch, SetStateAction, UIEventHandler } from "react";
+import { ChatObject } from "@/types/chat";
 
 interface ChatLogProps {
   currentAssistantMessage: string;
@@ -15,16 +17,35 @@ interface ChatLogProps {
 }
 
 export default function ChatLog({ currentAssistantMessage, messages, setInputPrompt, onClickHandler }: ChatLogProps) {
-  const chatLogRef = createRef<HTMLDivElement>();
+  const latestAssistantMessageRef = createRef<HTMLDivElement>();
+
+  const [scrollTop, setScrollTop] = useState(0);
+  const [hasUserScrolledUp, setHasUserScrolledUp] = useState(false);
+
+  const handleScroll = (event: UIEvent<HTMLElement>) => {
+    const previousScrollTop = scrollTop;
+    const container = event.currentTarget;
+    setScrollTop(event.currentTarget.scrollTop);
+
+    console.log(container.scrollTop, container.scrollHeight, container.clientHeight)
+    if (container.scrollTop < previousScrollTop && currentAssistantMessage !== '') {
+      setHasUserScrolledUp(true);
+    }
+  }
 
   useEffect(() => {
-    // Check if user currently focused on
-    chatLogRef.current?.scrollIntoView();
-  }, [chatLogRef]);
+    if (currentAssistantMessage === '')
+      setHasUserScrolledUp(false);
+
+    if (!hasUserScrolledUp)
+      latestAssistantMessageRef.current?.scrollIntoView({
+        "block": "end"
+      })
+  }, [latestAssistantMessageRef, hasUserScrolledUp, currentAssistantMessage]);
   
 
   return (
-    <section className="flex flex-col">
+    <section className="chatlog-container" onScroll={handleScroll}>
       {
         messages && messages.length === 0 && (
           <ChatSuggestion setInputPrompt={setInputPrompt} onClickHandler={onClickHandler} />
@@ -33,7 +54,6 @@ export default function ChatLog({ currentAssistantMessage, messages, setInputPro
       {
         messages.map((message, index) => (
           <div
-            ref={chatLogRef}
             key={index}
             className={
               `${rubik.className} whitespace-break-spaces my-2 ${message.role === 'user' ? 'user-message' : `assistant-message`} 
@@ -47,7 +67,7 @@ export default function ChatLog({ currentAssistantMessage, messages, setInputPro
       }
       {
         currentAssistantMessage &&
-        <div className={`${rubik.className} whitespace-break-spaces assistant-message new-message my-2`}>
+        <div ref={latestAssistantMessageRef} className={`${rubik.className} whitespace-break-spaces assistant-message new-message my-2`}>
           <p className="message" dangerouslySetInnerHTML={{__html: currentAssistantMessage}} />
         </div>
         

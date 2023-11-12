@@ -9,6 +9,7 @@ import ChatLog from "@/components/chat/log/ChatLog";
 import { UserContext } from "@/context/UserContext";
 import { Chat, ChatObject, UserContextType } from "@/types/chat";
 import { useRouter } from "next/navigation";
+import { simulateResponse } from "@/utils/test";
 // import { simulateResponse } from "@/utils/test";
 
 interface ServerResponse {
@@ -28,9 +29,6 @@ export default function Chat({ params }: ChatParams) {
 
 	const { getChat, getUserChats } = useContext(UserContext) as UserContextType;
 
-	// Scrolling behavior
-	const ref = createRef<HTMLDivElement>();
-
 	const [error, setError] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [inputPrompt, setInputPrompt] = useState<string>('');
@@ -47,7 +45,7 @@ export default function Chat({ params }: ChatParams) {
 				const messages = await getChat(params.id);
 				setMessages(messages);
 			} catch (error) {
-				console.log("Caught an error, redirecting to /chat")
+				console.log("Chat not found, redirecting to /chat")
 				router.replace('/chat');
 			}
 		}
@@ -88,6 +86,22 @@ export default function Chat({ params }: ChatParams) {
 
 	async function streamMessage(prompt: string, newMessages: ChatObject[]) {
 		const promptUrlParam = encodeURIComponent(prompt);
+
+		{ // Testing
+			let newAssistantTestMessage = '';
+			for await (const data of simulateResponse()) {
+				newAssistantTestMessage += data;
+				setCurrentAssistantMessage(newAssistantTestMessage)
+			}
+		
+			setCurrentAssistantMessage('');
+			setMessages(prev => [...prev, {
+				"role": "assistant",
+				"content": newAssistantTestMessage
+			}]);
+			setIsLoading(false);
+		}
+		return;
 
 		const eventSource = new EventSource(
 			`${process.env.API_ROUTE}/sse?prompt=${promptUrlParam}${chatIdUrlParam}`,
@@ -146,14 +160,12 @@ export default function Chat({ params }: ChatParams) {
 					{error}
 				</span>
 			}
-			<div ref={ref} className="chatlog-container overflow-y-auto">
-				<ChatLog
-					currentAssistantMessage={currentAssistantMessage}
-					messages={messages}
-					setInputPrompt={setInputPrompt}
-					onClickHandler={onClickHandler}
-				/>
-			</div>
+			<ChatLog
+				currentAssistantMessage={currentAssistantMessage}
+				messages={messages}
+				setInputPrompt={setInputPrompt}
+				onClickHandler={onClickHandler}
+			/>
 			<div className="chatinput-container fixed bottom-0">
 				<ChatInput
 					isLoading={isLoading}
