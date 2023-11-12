@@ -29,7 +29,11 @@ export default function Chat({ params }: ChatParams) {
 	const router = useRouter();
 
 	const { getChat, getUserChats } = useContext(UserContext) as UserContextType;
-	const { setActiveChatId, activeChatMessages, setActiveChatMessages } = useContext(ChatContext) as ChatContextType;
+	const {
+		activeChatId, setActiveChatId,
+		activeChatMessages, setActiveChatMessages,
+		chatIdUrlParam, setChatIdUrlParam
+	} = useContext(ChatContext) as ChatContextType;
 
 	const [error, setError] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -37,9 +41,6 @@ export default function Chat({ params }: ChatParams) {
 
 	const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
 
-	const [chatIdUrlParam, setChatIdUrlParam] = useState<string>('');
-
-	
 	useEffect(() => {
 		const fetchChat = async () => {
 			console.log("Fetching chat..", params.id[0]);
@@ -58,7 +59,7 @@ export default function Chat({ params }: ChatParams) {
 			fetchChat();
 		}
 
-	}, [getChat, params.id, router, setActiveChatMessages, setActiveChatId]);
+	}, [getChat, params.id, router, setActiveChatMessages, setActiveChatId, activeChatId, setChatIdUrlParam]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;

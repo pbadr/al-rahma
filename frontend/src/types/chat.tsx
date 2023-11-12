@@ -12,6 +12,8 @@ export interface ChatContextType {
   setActiveChatId: Dispatch<SetStateAction<string>>;
   activeChatMessages: ChatObject[];
   setActiveChatMessages: Dispatch<SetStateAction<ChatObject[]>>;
+  chatIdUrlParam: string;
+  setChatIdUrlParam: Dispatch<SetStateAction<string>>;
 }
 
 export interface ChatObject {

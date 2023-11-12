@@ -5,6 +5,7 @@ export const ChatContext = createContext<ChatContextType | null>(null);
 
 export default function ChatProvider({ children }: { children: React.ReactNode }) {
   const [activeChatId, setActiveChatId] = useState('');
+	const [chatIdUrlParam, setChatIdUrlParam] = useState<string>('');
   const [activeChatMessages, setActiveChatMessages] = useState<ChatObject[]>([]);
 
   return (
@@ -12,7 +13,9 @@ export default function ChatProvider({ children }: { children: React.ReactNode }
       activeChatId,
       setActiveChatId,
       activeChatMessages,
-      setActiveChatMessages
+      setActiveChatMessages,
+      chatIdUrlParam,
+      setChatIdUrlParam,
     }}>
       {children}
     </ChatContext.Provider>

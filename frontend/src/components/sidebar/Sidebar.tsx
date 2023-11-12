@@ -14,7 +14,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
-  const { setActiveChatId, setActiveChatMessages } = useContext(ChatContext) as ChatContextType;
+  const { setActiveChatId, setActiveChatMessages, setChatIdUrlParam } = useContext(ChatContext) as ChatContextType;
 
   const router = useRouter();
 
@@ -31,6 +31,7 @@ export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
   const handleNewChatClick = () => {
     toggleSidebar();
 
+    setChatIdUrlParam('');
     setActiveChatId('');
     setActiveChatMessages([]);
 
