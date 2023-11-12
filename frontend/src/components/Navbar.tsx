@@ -1,20 +1,35 @@
 import Image from "next/image"
-import Link from "next/link"
 
 import "./Navbar.css";
 
-export default function Navbar() {
+type NavbarProps = {
+  sidebarToggled: boolean;
+  toggleSidebar: () => void;
+}
+
+export default function Navbar({ sidebarToggled, toggleSidebar }: NavbarProps) {
   return (
-    <nav className="flex items-center justify-center gap-5 bg-secondary rounded-br-3xl h-[50px]">
-      <Link href="/">
+    <nav className="navbar">
+      <div onClick={toggleSidebar} className="hamburger">
+        {
+          sidebarToggled ? 
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          : 
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        }
+      </div>
+      <div className="logo">
         <Image
-          className="hover:opacity-90 transition-opacity logo"
-          src="logo.svg"
+          src="/images/logo.svg"
           alt="logo"
-          width={50} height={50} />
-      </Link>
-      <div className="flex">
-        <Link href="/chat" className="hover:text-blue-100">Chat</Link>
+          width={40}
+          height={40}
+          style={{ width: 40, height: 40 }}
+        />
       </div>
     </nav>
   )

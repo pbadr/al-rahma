@@ -24,6 +24,7 @@ type ChatParams = {
 };
 
 export default function Chat({ params }: ChatParams) {
+	console.log("Chat rerendered")
 	const { getChat, getUserChats } = useContext(UserContext) as UserContextType;
 
 	// Scrolling behavior

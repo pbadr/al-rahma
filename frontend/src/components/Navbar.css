@@ -1,13 +1,29 @@
-.logo {
-  animation: logo-appear 1s ease-in-out;
+.navbar {
+  display: none;
+  height: var(--navbar-height)
 }
 
-@keyframes logo-appear {
-  from {
-    transform: translateY(-100px);
-    opacity: 0.5;
-  } to {
-    transform: translateY(0px);
-    opacity: 1;
+.overlay {
+  width: 100%;
+  height: calc(100vh - var(--navbar-height));
+  @apply absolute bg-primary opacity-90;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    @apply flex justify-center items-center bg-secondary;
+  }
+
+  .navbar .hamburger {
+    width: 50px;
+    padding-left: 20px;
+    cursor: pointer;
+  }
+
+  .navbar .logo {
+    display: flex;
+    width: 100%;
+    padding-right: 50px;
+    justify-content: center;
   }
 }
