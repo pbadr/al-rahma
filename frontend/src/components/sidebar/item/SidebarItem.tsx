@@ -1,5 +1,6 @@
+import { ChatContext } from "@/context/ChatContext";
 import { UserContext } from "@/context/UserContext";
-import { UserContextType } from "@/types/chat";
+import { ChatContextType, UserContextType } from "@/types/chat";
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
@@ -11,14 +12,20 @@ interface SidebarItemProps {
 }
 
 export default function SidebarItem({ id, firstMessage, toggleSideBar }: SidebarItemProps) {
-  const [hovered, setHovered] = useState(false);
+  const { activeChatId, setActiveChatId } = useContext(ChatContext) as ChatContextType;
 
+  const navigateToChat = () => {
+    setActiveChatId(id);
+    toggleSideBar();
+  }
+
+  const [hovered, setHovered] = useState(false);
   return (
     <div className="relative" onMouseOver={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <Link href={`/chat/${id}`} onClick={toggleSideBar}>
+      <Link href={`/chat/${id}`} onClick={navigateToChat}>
         <div
           title={firstMessage}
-          className="relative appear flex items-center gap-2 text-sm rounded-lg bg-primary py-4 px-3 cursor-pointer hover:bg-secondary transition-colors"
+          className={`relative ${activeChatId === id && 'border-[1px] border-blue-400'} appear flex items-center gap-2 text-sm rounded-lg bg-primary py-4 px-3 cursor-pointer hover:bg-secondary transition-colors`}
         >
         <ChatHistoryIcon />
           <p className="max-w-[176px] whitespace-nowrap overflow-hidden text-ellipsis">{firstMessage}</p>
@@ -38,6 +45,8 @@ function ChatHistoryIcon() {
 }
 
 function DeleteChatHistoryIcon({ chatId }: { chatId: string }) {
+  const { activeChatId, setActiveChatId, setActiveChatMessages } = useContext(ChatContext) as ChatContextType;
+
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -49,11 +58,16 @@ function DeleteChatHistoryIcon({ chatId }: { chatId: string }) {
     await deleteChat(chatId);
     setIsLoading(false);
 
-    router.refresh()
+    if (chatId === activeChatId) {
+      setActiveChatId('');
+      setActiveChatMessages([]);
+    }
+
+    router.replace('/chat');
   }
 
   return (
-    <div onClick={handleDelete} className="absolute bg-secondary rounded-lg py-4 px-2 right-0 top-0 cursor-pointer">
+    <div onClick={handleDelete} className="absolute border-[1px] border-blue-400 bg-secondary rounded-lg py-4 px-2 right-0 top-0 cursor-pointer">
       {
         isLoading ?
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 opacity-50 cursor-not-allowed">

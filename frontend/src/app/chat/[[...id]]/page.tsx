@@ -7,9 +7,10 @@ import { ChangeEvent, createRef, useState, useEffect, useContext } from "react"
 import ChatInput from "@/components/chat/input/ChatInput";
 import ChatLog from "@/components/chat/log/ChatLog";
 import { UserContext } from "@/context/UserContext";
-import { Chat, ChatObject, UserContextType } from "@/types/chat";
+import { Chat, ChatContextType, ChatObject, UserContextType } from "@/types/chat";
 import { useRouter } from "next/navigation";
 import { simulateResponse } from "@/utils/test";
+import { ChatContext } from "@/context/ChatContext";
 // import { simulateResponse } from "@/utils/test";
 
 interface ServerResponse {
@@ -28,12 +29,12 @@ export default function Chat({ params }: ChatParams) {
 	const router = useRouter();
 
 	const { getChat, getUserChats } = useContext(UserContext) as UserContextType;
+	const { setActiveChatId, activeChatMessages, setActiveChatMessages } = useContext(ChatContext) as ChatContextType;
 
 	const [error, setError] = useState<string>('');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [inputPrompt, setInputPrompt] = useState<string>('');
 
-	const [messages, setMessages] = useState<ChatObject[]>([]);
 	const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
 
 	const [chatIdUrlParam, setChatIdUrlParam] = useState<string>('');
@@ -41,24 +42,22 @@ export default function Chat({ params }: ChatParams) {
 	
 	useEffect(() => {
 		const fetchChat = async () => {
-			console.log("Fetching chat..");
+			console.log("Fetching chat..", params.id);
 			try {
-				const messages = await getChat(params.id);
-				setMessages(messages);
+				const newMessages = await getChat(params.id);
+				setActiveChatMessages(newMessages);
 			} catch (error) {
 				console.log("Chat not found, redirecting to /chat")
-				setMessages([]);
+				setActiveChatMessages([]);
 				router.replace('/chat');
 			}
 		}
 		if (params.id) {
 			setChatIdUrlParam(`&chatId=${params.id}`)
+			fetchChat();
 		}
 
-		if (chatIdUrlParam !== '')
-			fetchChat();
-
-	}, [getChat, params.id, chatIdUrlParam, router]);
+	}, [getChat, params.id, router, setActiveChatMessages]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;
@@ -71,12 +70,12 @@ export default function Chat({ params }: ChatParams) {
 
 		try {
 			// Set your own message on the messages list
-			let newMessages = [...messages, {
+			let newMessages = [...activeChatMessages, {
 				role: "user",
 				content: prompt
 			}] as ChatObject[];
 
-			setMessages(newMessages);
+			setActiveChatMessages(newMessages);
 
 			await streamMessage(prompt, newMessages);
 		} catch (error) {
@@ -100,7 +99,7 @@ export default function Chat({ params }: ChatParams) {
 		// 	}
 		
 		// 	setCurrentAssistantMessage('');
-		// 	setMessages(prev => [...prev, {
+		// 	setActiveChatMessages(prev => [...prev, {
 		// 		"role": "assistant",
 		// 		"content": newAssistantTestMessage
 		// 	}]);
@@ -118,9 +117,11 @@ export default function Chat({ params }: ChatParams) {
 			const data: ServerResponse = JSON.parse(event.data);
 			// If new chat, replace chatId URL without rerender
 			if (data.index === 1) {
-				console.log(data.chat_id)
 				getUserChats();
 				setChatIdUrlParam(`&chatId=${data.chat_id}`);
+
+				setActiveChatId(data.chat_id);
+
 				window.history.replaceState(null, '', `/chat/${data.chat_id}`)
 			}
 
@@ -135,7 +136,7 @@ export default function Chat({ params }: ChatParams) {
 					content: newAssistantMessage
 				}] as ChatObject[];
 				
-				setMessages(newMessages);
+				setActiveChatMessages(newMessages);
 
 				return;
 			}
@@ -168,7 +169,6 @@ export default function Chat({ params }: ChatParams) {
 			}
 			<ChatLog
 				currentAssistantMessage={currentAssistantMessage}
-				messages={messages}
 				setInputPrompt={setInputPrompt}
 				onClickHandler={onClickHandler}
 			/>

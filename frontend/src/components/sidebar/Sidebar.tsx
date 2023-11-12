@@ -1,8 +1,12 @@
+import { useContext } from "react";
+
 import "./Sidebar.css";
 
 import Image from "next/image";
 import SidebarItems from "./items/SidebarItems";
 import { useRouter } from "next/navigation";
+import { ChatContext } from "@/context/ChatContext";
+import { ChatContextType } from "@/types/chat";
 
 interface SidebarProps {
   toggled: boolean;
@@ -10,6 +14,8 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
+  const { setActiveChatId, setActiveChatMessages } = useContext(ChatContext) as ChatContextType;
+
   const router = useRouter();
 
   const handleLogOut = async () => {
@@ -21,6 +27,16 @@ export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
 
     router.push('/');
   }
+
+  const handleNewChatClick = () => {
+    toggleSidebar();
+
+    setActiveChatId('');
+    setActiveChatMessages([]);
+
+    router.replace('/chat');
+  }
+
   return (
     <aside className={`sidebar ${toggled && 'toggled'} absolute md:relative flex flex-col justify-between w-[260px] bg-[#18233D] p-4`}>
       <div> {/* Top section */}
@@ -36,10 +52,7 @@ export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
             <h1>Al-Rahma</h1>
           </div>
           <p className="text-sm">Your intelligent <b>Quranic</b> assistant</p>
-          <button onClick={() => {
-            toggleSidebar();
-            router.replace('/chat');
-          }} className="button mt-3 !w-full">New Chat</button>
+          <button onClick={handleNewChatClick} className="button mt-3 !w-full">New Chat</button>
         </div>
         <div className="mt-6"> {/* User Chat History */}
           <h2 className="text-lg font-bold mb-2">User Chat History</h2>

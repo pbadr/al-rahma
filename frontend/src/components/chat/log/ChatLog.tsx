@@ -1,22 +1,24 @@
 import "./ChatLog.css";
 
-import { UIEvent, useState } from "react";
+import { UIEvent, useContext, useState } from "react";
 
 import { Rubik } from "next/font/google";
 const rubik = Rubik({ weight: "400", subsets: ["arabic"] })
 
 import ChatSuggestion from "@/components/chat/suggestions/ChatSuggestion";
-import { useEffect, createRef, Dispatch, SetStateAction, UIEventHandler } from "react";
-import { ChatObject } from "@/types/chat";
+import { useEffect, createRef, Dispatch, SetStateAction } from "react";
+import { ChatContextType } from "@/types/chat";
+import { ChatContext } from "@/context/ChatContext";
 
 interface ChatLogProps {
   currentAssistantMessage: string;
-  messages: ChatObject[];
   setInputPrompt: Dispatch<SetStateAction<string>>;
   onClickHandler: () => void;
 }
 
-export default function ChatLog({ currentAssistantMessage, messages, setInputPrompt, onClickHandler }: ChatLogProps) {
+export default function ChatLog({ currentAssistantMessage, setInputPrompt, onClickHandler }: ChatLogProps) {
+  const { activeChatMessages } = useContext(ChatContext) as ChatContextType;
+
   const latestAssistantMessageRef = createRef<HTMLDivElement>();
 
   const [scrollTop, setScrollTop] = useState(0);
@@ -46,17 +48,17 @@ export default function ChatLog({ currentAssistantMessage, messages, setInputPro
   return (
     <section className="chatlog-container" onScroll={handleScroll}>
       {
-        messages && messages.length === 0 && (
+        activeChatMessages && activeChatMessages.length === 0 && (
           <ChatSuggestion setInputPrompt={setInputPrompt} onClickHandler={onClickHandler} />
         )
       }
       {
-        messages.map((message, index) => (
+        activeChatMessages.map((message, index) => (
           <div
             key={index}
             className={
               `${rubik.className} whitespace-break-spaces my-2 ${message.role === 'user' ? 'user-message' : `assistant-message`} 
-              ${index === messages.length - 1 && 'new-message'}
+              ${index === activeChatMessages.length - 1 && 'new-message'}
               `
             }
           >

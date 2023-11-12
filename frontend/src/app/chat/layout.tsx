@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import UserProvider from "@/context/UserContext";
 import Navbar from "@/components/Navbar";
+import ChatProvider from "@/context/ChatContext";
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
   console.log("Chat Layout rerendered")
@@ -30,18 +31,20 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <UserProvider>
-      <main className="flex flex-col">
-        <Navbar sidebarToggled={sidebarToggled} toggleSidebar={toggleSidebar} />
-        <div className="flex">
-          <Sidebar toggled={sidebarToggled} toggleSidebar={toggleSidebar} />
-          {
-            sidebarToggled && (
-              <div onClick={() => setSidebarToggled(false)} className="overlay"></div>
-            )
-          }
-          {children}
-        </div>
-      </main>
+      <ChatProvider>
+        <main className="flex flex-col">
+          <Navbar sidebarToggled={sidebarToggled} toggleSidebar={toggleSidebar} />
+          <div className="flex">
+            <Sidebar toggled={sidebarToggled} toggleSidebar={toggleSidebar} />
+            {
+              sidebarToggled && (
+                <div onClick={() => setSidebarToggled(false)} className="overlay"></div>
+              )
+            }
+            {children}
+          </div>
+        </main>
+      </ChatProvider>
     </UserProvider>
   )
 }
