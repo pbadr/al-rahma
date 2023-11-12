@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 import UserProvider from "@/context/UserContext";
 import Navbar from "@/components/Navbar";
 import ChatProvider from "@/context/ChatContext";
+import { useRouter } from "next/navigation";
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
-  console.log("Chat Layout rerendered")
   const [sidebarToggled, setSidebarToggled] = useState(false);
 
   function toggleSidebar() {

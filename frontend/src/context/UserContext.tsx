@@ -1,15 +1,21 @@
 import { Chat, UserContextType } from "@/types/chat";
 import { delay } from "@/utils/test";
+import { useRouter } from "next/navigation";
 import { useState, useEffect, createContext, ReactNode } from "react";
 
 export const UserContext = createContext<UserContextType | null>(null);
 
 export default function UserProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  
   const [chatHistory, setChatHistory] = useState<Chat[]>([]);
 
   useEffect(() => {
-    getUserChats();
-  }, []);
+    if (!localStorage.getItem('userId'))
+      return router.replace('/');
+    
+    getUserChats(); 
+  }, [router]);
 
   const getUserChats = async () => {
     console.log("Fetching user chats...")

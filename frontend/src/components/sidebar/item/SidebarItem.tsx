@@ -23,6 +23,7 @@ export default function SidebarItem({ id, firstMessage, toggleSideBar }: Sidebar
   return (
     <div className="relative" onMouseOver={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <Link href={`/chat/${id}`} onClick={navigateToChat}>
+        {activeChatId === id && <p className="text-xs opacity-80 mb-2">Currently active here</p>}
         <div
           title={firstMessage}
           className={`relative ${activeChatId === id && 'border-[1px] border-blue-400'} appear flex items-center gap-2 text-sm rounded-lg bg-primary py-4 px-3 cursor-pointer hover:bg-secondary transition-colors`}
@@ -67,7 +68,7 @@ function DeleteChatHistoryIcon({ chatId }: { chatId: string }) {
   }
 
   return (
-    <div onClick={handleDelete} className="absolute border-[1px] border-blue-400 bg-secondary rounded-lg py-4 px-2 right-0 top-0 cursor-pointer">
+    <div onClick={handleDelete} className="absolute border-[1px] border-blue-400 bg-secondary rounded-lg py-4 px-2 right-0 bottom-0 cursor-pointer">
       {
         isLoading ?
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 opacity-50 cursor-not-allowed">
