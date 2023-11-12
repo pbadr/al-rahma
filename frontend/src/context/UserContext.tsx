@@ -25,9 +25,9 @@ export default function UserProvider({ children }: { children: ReactNode }) {
         method: 'GET',
       })
       const data = await response.json();
-      const userChats = data.chats;
-      console.log(userChats);
-      setChatHistory(userChats);
+      const userChats: Chat[] = data.chats;
+
+      setChatHistory(userChats.reverse());
       console.log("Done fetching user chats")
     } catch (error) {
       console.error(error);

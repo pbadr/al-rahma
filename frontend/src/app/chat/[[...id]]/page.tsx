@@ -42,10 +42,11 @@ export default function Chat({ params }: ChatParams) {
 	
 	useEffect(() => {
 		const fetchChat = async () => {
-			console.log("Fetching chat..", params.id);
+			console.log("Fetching chat..", params.id[0]);
 			try {
 				const newMessages = await getChat(params.id);
 				setActiveChatMessages(newMessages);
+				setActiveChatId(params.id[0]);
 			} catch (error) {
 				console.log("Chat not found, redirecting to /chat")
 				setActiveChatMessages([]);
@@ -53,11 +54,11 @@ export default function Chat({ params }: ChatParams) {
 			}
 		}
 		if (params.id) {
-			setChatIdUrlParam(`&chatId=${params.id}`)
+			setChatIdUrlParam(`&chatId=${params.id[0]}`)
 			fetchChat();
 		}
 
-	}, [getChat, params.id, router, setActiveChatMessages]);
+	}, [getChat, params.id, router, setActiveChatMessages, setActiveChatId]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;

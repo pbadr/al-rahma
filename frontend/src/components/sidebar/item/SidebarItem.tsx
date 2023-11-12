@@ -18,7 +18,7 @@ export default function SidebarItem({ id, firstMessage, toggleSideBar }: Sidebar
     setActiveChatId(id);
     toggleSideBar();
   }
-
+  
   const [hovered, setHovered] = useState(false);
   return (
     <div className="relative" onMouseOver={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
