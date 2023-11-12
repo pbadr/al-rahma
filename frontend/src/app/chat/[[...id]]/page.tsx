@@ -46,6 +46,7 @@ export default function Chat({ params }: ChatParams) {
 			setMessages(messages);
 		}
 		if (params.id) {
+			setChatIdUrlParam(`&chatId=${params.id}`)
 			fetchChat();
 		}
 	}, [getChat, params.id]);
