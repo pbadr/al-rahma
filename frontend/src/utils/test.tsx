@@ -1,4 +1,4 @@
-async function delay(miliseconds: number): Promise<void> {
+export async function delay(miliseconds: number): Promise<void> {
   return new Promise((resolve, _) => {
     setTimeout(() => {
       resolve()

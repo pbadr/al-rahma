@@ -1,6 +1,7 @@
 export interface UserContextType {
   chatHistory: Chat[];
   getChat: (chatId: string) => Promise<ChatObject[]>;
+  deleteChat: (chatId: string) => Promise<string | void>;
   getUserChats: () => void;
 }
 

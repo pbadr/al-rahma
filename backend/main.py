@@ -7,7 +7,7 @@ from util import (
   get_chat_response, get_chat_stream_response, 
   ServerSentEvent, 
   config,
-  create_user, create_chat, add_message_to_chat, get_user_chats, get_chat_history
+  create_user, create_chat, add_message_to_chat, get_user_chats, get_chat_history, delete_chat_history
 )
 
 from urllib.parse import unquote
@@ -50,9 +50,15 @@ async def chat_history():
     "chats": user_chats
   }, 200
 
-@app.route('/chat/<string:chat_id>', methods=['GET'])
+@app.route('/chat/<string:chat_id>', methods=['GET', 'DELETE'])
 @login_required
-async def get_chat(chat_id):
+async def chat(chat_id):
+  if request.method == 'DELETE':
+    chat_id = delete_chat_history(current_user.auth_id, chat_id)
+    return {
+      "chat_id": chat_id
+    }, 200
+
   chat_history = get_chat_history(chat_id)
   return {
     "chat": chat_history

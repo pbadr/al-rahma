@@ -1,4 +1,5 @@
 import { Chat, UserContextType } from "@/types/chat";
+import { delay } from "@/utils/test";
 import { useState, useEffect, createContext, ReactNode } from "react";
 
 export const UserContext = createContext<UserContextType | null>(null);
@@ -40,8 +41,25 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const deleteChat = async (chatId: string) => {
+    try {
+      const response = await fetch(`${process.env.API_ROUTE}/chat/${chatId}`, {
+        credentials: 'include',
+        method: 'DELETE',
+      });
+      const data = await response.json();
+      
+      // Reload chat history on sidebar
+      getUserChats();
+
+      return data["chat_id"];
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
-    <UserContext.Provider value={{ chatHistory, getChat, getUserChats }}>
+    <UserContext.Provider value={{ chatHistory, getChat, deleteChat, getUserChats }}>
       {children}
     </UserContext.Provider>
   )

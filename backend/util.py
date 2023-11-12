@@ -129,6 +129,19 @@ def get_chat_history(chat_id):
 	
 	return chat_history
 
+def delete_chat_history(user_id, chat_id):
+	user_collection.find_one_and_delete({"_id": ObjectId(user_id)}, 
+		{
+			'$set': { 'chats': chat_id }
+		}
+	)
+
+	chats_collection.find_one_and_delete({
+		"_id": ObjectId(chat_id)
+	})
+
+	return chat_id
+
 def get_user_chats(user_id):
 	user = user_collection.find_one({
 		"_id": ObjectId(user_id)
