@@ -59,10 +59,17 @@ async def chat(chat_id):
       "chat_id": chat_id
     }, 200
 
-  chat_history = get_chat_history(chat_id)
-  return {
-    "chat": chat_history
-  }, 200
+  try:
+    chat_history = get_chat_history(chat_id)
+    return {
+      "chat": chat_history
+    }, 200
+  
+  except Exception:
+    return {
+      "chat": [],
+      "error": True,
+    }
 
 import asyncio
 @app.route('/sse', methods=['GET'])
@@ -76,8 +83,6 @@ async def sse():
     return {
       "error": "Please pass in a prompt"
     }, 400
-  
-  
   
   prompt = unquote(raw_prompt)
 

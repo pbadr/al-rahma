@@ -26,7 +26,7 @@ export default function ChatLog({ currentAssistantMessage, messages, setInputPro
   return (
     <section className="flex flex-col">
       {
-        messages.length === 0 && (
+        messages && messages.length === 0 && (
           <ChatSuggestion setInputPrompt={setInputPrompt} onClickHandler={onClickHandler} />
         )
       }

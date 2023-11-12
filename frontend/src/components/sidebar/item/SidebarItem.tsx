@@ -49,7 +49,7 @@ function DeleteChatHistoryIcon({ chatId }: { chatId: string }) {
     await deleteChat(chatId);
     setIsLoading(false);
 
-    router.replace('/chat')
+    router.refresh()
   }
 
   return (

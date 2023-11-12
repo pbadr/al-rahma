@@ -8,6 +8,7 @@ import ChatInput from "@/components/chat/input/ChatInput";
 import ChatLog from "@/components/chat/log/ChatLog";
 import { UserContext } from "@/context/UserContext";
 import { Chat, ChatObject, UserContextType } from "@/types/chat";
+import { useRouter } from "next/navigation";
 // import { simulateResponse } from "@/utils/test";
 
 interface ServerResponse {
@@ -23,7 +24,8 @@ type ChatParams = {
 };
 
 export default function Chat({ params }: ChatParams) {
-	console.log("Chat rerendered")
+	const router = useRouter();
+
 	const { getChat, getUserChats } = useContext(UserContext) as UserContextType;
 
 	// Scrolling behavior
@@ -41,19 +43,24 @@ export default function Chat({ params }: ChatParams) {
 	
 	useEffect(() => {
 		const fetchChat = async () => {
-			const messages = await getChat(params.id);
-			setMessages(messages);
+			try {
+				const messages = await getChat(params.id);
+				setMessages(messages);
+			} catch (error) {
+				console.log("Caught an error, redirecting to /chat")
+				router.replace('/chat');
+			}
 		}
 		if (params.id) {
 			setChatIdUrlParam(`&chatId=${params.id}`)
 			fetchChat();
 		}
-	}, [getChat, params.id, chatIdUrlParam]);
+	}, [getChat, params.id, chatIdUrlParam, router]);
 
 	async function onClickHandler() {
 		const prompt = inputPrompt;
 
-		console.log(prompt);
+		console.log('Sending prompt:', prompt);
 
 		setInputPrompt('');
 		setIsLoading(true);

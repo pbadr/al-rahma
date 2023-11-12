@@ -29,16 +29,17 @@ export default function UserProvider({ children }: { children: ReactNode }) {
   }
 
   const getChat = async (chatId: string) => {
-    try {
-      const response = await fetch(`${process.env.API_ROUTE}/chat/${chatId}`, {
-        credentials: 'include',
-        method: 'GET',
-      })
-      const data = await response.json();
-      return data.chat;
-    } catch (error) {
-      console.error(error);
+    const response = await fetch(`${process.env.API_ROUTE}/chat/${chatId}`, {
+      credentials: 'include',
+      method: 'GET',
+    })
+    const data = await response.json();
+    
+    if (data.error) {
+      throw new Error(data.error)
     }
+    
+    return data.chat;
   }
 
   const deleteChat = async (chatId: string) => {
