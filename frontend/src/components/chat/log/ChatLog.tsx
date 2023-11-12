@@ -27,7 +27,6 @@ export default function ChatLog({ currentAssistantMessage, messages, setInputPro
     const container = event.currentTarget;
     setScrollTop(event.currentTarget.scrollTop);
 
-    console.log(container.scrollTop, container.scrollHeight, container.clientHeight)
     if (container.scrollTop < previousScrollTop && currentAssistantMessage !== '') {
       setHasUserScrolledUp(true);
     }
