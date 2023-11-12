@@ -37,6 +37,8 @@ export default function Chat({ params }: ChatParams) {
 	const [messages, setMessages] = useState<ChatObject[]>([]);
 	const [currentAssistantMessage, setCurrentAssistantMessage] = useState<string>('');
 
+	const [chatIdUrlParam, setChatIdUrlParam] = useState<string>('');
+
 	
 	useEffect(() => {
 		const fetchChat = async () => {
@@ -80,10 +82,6 @@ export default function Chat({ params }: ChatParams) {
 	async function streamMessage(prompt: string, newMessages: ChatObject[]) {
 		const promptUrlParam = encodeURIComponent(prompt);
 
-		let chatIdUrlParam = ''
-		if (params.id)
-			chatIdUrlParam = `&chatId=${params.id}`
-			
 		const eventSource = new EventSource(
 			`${process.env.API_ROUTE}/sse?prompt=${promptUrlParam}${chatIdUrlParam}`,
 			{ withCredentials: true }
@@ -95,6 +93,7 @@ export default function Chat({ params }: ChatParams) {
 			// If new chat, replace chatId URL without rerender
 			if (data.index === 1) {
 				getUserChats();
+				setChatIdUrlParam(`&chatId=${data.chat_id}`);
 				window.history.replaceState(null, '', `/chat/${data.chat_id}`)
 			}
 
