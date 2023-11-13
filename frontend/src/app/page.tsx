@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, MouseEvent } from "react";
 
@@ -34,17 +35,24 @@ export default function Home() {
       }));
       
       console.log("Saved user id");
+      
       router.push('/chat');
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   }
 
   return (
     <main className="h-screen flex flex-col items-center justify-center text-center appear">
       <div className="flex flex-col items-center gap-2 tracking-tighter">
         <h1 className="text-3xl font-bold">Al-Rahma</h1>
-        <h1 className="text-3xl font-bold">الرحمة</h1>
+        <Image
+          priority={true}
+          src="/images/logo.svg"
+          alt="logo"
+          width={100}
+          height={100}
+          style={{ width: 100, height: 100 }}
+        />
         <h2 className="text-lg">Al-Rahma is an intelligent <b>Quranic</b> assistant</h2>
       </div>
       <div className="mt-32 w-64">

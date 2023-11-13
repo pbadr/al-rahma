@@ -13,6 +13,8 @@ export interface UserContextType {
 }
 
 export interface ChatContextType {
+  isAssistantGenerating: boolean;
+  setIsAssistantGenerating: Dispatch<SetStateAction<boolean>>;
   activeChatId: string;
   setActiveChatId: Dispatch<SetStateAction<string>>;
   activeChatMessages: ChatObject[];

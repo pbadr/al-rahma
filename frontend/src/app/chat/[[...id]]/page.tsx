@@ -30,6 +30,7 @@ export default function Chat({ params }: ChatParams) {
 
 	const { getChat, getUserChats } = useContext(UserContext) as UserContextType;
 	const {
+		setIsAssistantGenerating,
 		activeChatId, setActiveChatId,
 		activeChatMessages, setActiveChatMessages,
 		chatIdUrlParam, setChatIdUrlParam
@@ -119,6 +120,8 @@ export default function Chat({ params }: ChatParams) {
 			const data: ServerResponse = JSON.parse(event.data);
 			// If new chat, replace chatId URL without rerender
 			if (data.index === 1) {
+				setIsAssistantGenerating(true);
+
 				getUserChats();
 				setChatIdUrlParam(`&chatId=${data.chat_id}`);
 
@@ -139,6 +142,7 @@ export default function Chat({ params }: ChatParams) {
 				}] as ChatObject[];
 				
 				setActiveChatMessages(newMessages);
+				setIsAssistantGenerating(false);
 
 				return;
 			}
