@@ -1,4 +1,4 @@
-import { Chat, UserContextType } from "@/types/chat";
+import { Chat, User, UserContextType } from "@/types/chat";
 import { delay } from "@/utils/test";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, createContext, ReactNode } from "react";
@@ -9,10 +9,14 @@ export default function UserProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   
   const [chatHistory, setChatHistory] = useState<Chat[]>([]);
+  const [isMuslim, setIsMuslim] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (!localStorage.getItem('userId'))
+    if (!localStorage.getItem('user'))
       return router.replace('/');
+    
+    const user = JSON.parse(localStorage.getItem('user') as string) as User;
+    setIsMuslim(user.isMuslim);
     
     getUserChats(); 
   }, [router]);
@@ -66,7 +70,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <UserContext.Provider value={{ chatHistory, getChat, deleteChat, getUserChats }}>
+    <UserContext.Provider value={{ chatHistory, isMuslim, getChat, deleteChat, getUserChats }}>
       {children}
     </UserContext.Provider>
   )

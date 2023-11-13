@@ -8,7 +8,7 @@ export default function Home() {
 
   useEffect(() => {
     // User already authenticated
-    if (localStorage.getItem('userId'))
+    if (localStorage.getItem('user'))
       router.push('/chat');
   }, [router]);
 
@@ -28,7 +28,11 @@ export default function Home() {
 
     const data = await response.json();
     if (data.message === "Logged in") {
-      localStorage.setItem('userId', data.user_id);
+      localStorage.setItem('user', JSON.stringify({
+        userId: data.user_id,
+        isMuslim: data.is_muslim
+      }));
+      
       console.log("Saved user id");
       router.push('/chat');
     }

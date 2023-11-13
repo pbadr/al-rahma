@@ -1,7 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
 
+export interface User {
+  userId: string;
+  isMuslim: boolean;
+}
 export interface UserContextType {
   chatHistory: Chat[];
+  isMuslim: boolean | null;
   getChat: (chatId: string) => Promise<ChatObject[]>;
   deleteChat: (chatId: string) => Promise<string | void>;
   getUserChats: () => void;

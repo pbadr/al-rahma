@@ -181,6 +181,7 @@ async def login():
   return {
     "message": "Logged in",
     "user_id": user_id,
+    "is_muslim": is_muslim
   }, 200
 
 @app.route('/logout')
