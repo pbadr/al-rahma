@@ -213,4 +213,4 @@ async def api():
     'response': response
   }, 200
 
-app.run(port=5000)
+# UNCOMMENT if development: app.run(port=5000)

@@ -1,7 +1,22 @@
 import json
 import openai
 
-config = json.loads(open('./config.json').read())
+import os
+
+if os.environ["ENVIRONMENT"] == "PRODUCTION":
+	config = {
+		"MONGODB_URI": os.environ['MONGODB_URI'],
+		"OPENAI_ORGANIZATION_ID": os.environ['OPENAI_ORGANIZATION_ID'],
+		"OPENAI_API_KEY": os.environ['OPENAI_API_KEY'],
+		"QUART_APP_SECRET": os.environ['QUART_APP_SECRET'],
+		"BASE_MODEL": os.environ['BASE_MODEL'],
+		"SYSTEM_MESSAGE": json.loads(os.environ['SYSTEM_MESSAGE']),
+		"NON_MUSLIM_PROMPT_LINE": os.environ['NON_MUSLIM_PROMPT_LINE'],
+		"TEMPERATURE": 0.25,
+		"MAX_TOKENS": 1000
+	}
+else:
+	config = json.loads(open('./config.json').read())
 
 openai.api_key = config['OPENAI_API_KEY']
 openai.organization = config['OPENAI_ORGANIZATION_ID']
