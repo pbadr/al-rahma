@@ -213,4 +213,7 @@ async def api():
     'response': response
   }, 200
 
-# UNCOMMENT if development: app.run(port=5000)
+import os
+
+if not os.environ["ENVIRONMENT"] == "PRODUCTION":
+  app.run(port=5000)
