@@ -113,7 +113,7 @@ async def sse():
     if message:
       print(f"Inserted user message to {chat_id}")
 
-  response_stream = get_chat_stream_response(chat_id)
+  response_stream = get_chat_stream_response(chat_id, current_user.auth_id)
   async def send_events():
     assistant_message = ""
     for index, chunk_message in enumerate(response_stream):
@@ -158,10 +158,26 @@ async def sse():
 
 @app.route('/login', methods=['POST'])
 async def login():
-  user = create_user()
+  try:
+    data = json.loads(await request.get_data(as_text=True))
+  except json.decoder.JSONDecodeError:
+    return {
+      "message": "Send valid JSON data",
+      "error": True
+    }, 400
+  
+  if not "isMuslim" in data:
+    return {
+      "message": "Please specify whether you are a Muslim or not",
+      "error": True
+    }, 400
+  
+  is_muslim = data["isMuslim"]
+
+  user = create_user(is_muslim)
   user_id = str(user.inserted_id)
   login_user(AuthUser(user_id), remember=True)
-
+  
   return {
     "message": "Logged in",
     "user_id": user_id,

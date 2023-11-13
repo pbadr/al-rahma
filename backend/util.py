@@ -19,9 +19,27 @@ def get_chat_response(prompt):
 
 	return response['choices'][0]['message']['content']
 
-def get_chat_stream_response(chat_id):
+def get_chat_stream_response(chat_id, user_id):
+	print("Generating stream response for", user_id)
+	is_muslim = is_user_muslim(user_id)
+
+	print("Detected", user_id, "Muslim status:", is_muslim)
+
+	system_message: dict = config['SYSTEM_MESSAGE']
+
+	# If user is not Muslim, insert the non-Muslim line
+	if not is_muslim:
+		system_message_content: str = system_message['content']
+		system_message_content_split = system_message_content.split("\n\n")
+
+		# Insert the line at 3rd (start_index - 1) line
+		system_message_content_split.insert(2, config['NON_MUSLIM_PROMPT_LINE'])
+		system_message_content = "\n\n".join(system_message_content_split)
+
+		system_message["content"] = system_message_content
+
 	chat_history = get_chat_history(chat_id)
-	messages = [config['SYSTEM_MESSAGE']] + chat_history
+	messages = [system_message] + chat_history
 	
 	response = openai.ChatCompletion.create(
 		model=config['BASE_MODEL'],
@@ -83,8 +101,9 @@ database: Database = client['alrahma']
 user_collection: Collection = database['users']
 chats_collection: Collection = database['chats']
 
-def create_user():
+def create_user(is_muslim: bool):
 	user = user_collection.insert_one({
+		"is_muslim": is_muslim,
 		"chats": []
 	})
 
@@ -159,6 +178,15 @@ def get_user_chats(user_id):
 		})
 
 	return chats
+
+def is_user_muslim(user_id):
+	print("Getting user...", user_id)
+	user = user_collection.find_one({
+		"_id": ObjectId(user_id)
+	})
+
+	if user:
+		return user["is_muslim"]
 
 def delete_user(user_id):
 	print("Deleting user...", user_id)

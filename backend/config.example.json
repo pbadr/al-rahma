@@ -5,6 +5,7 @@
   "QUART_APP_SECRET": "",
   "BASE_MODEL": "",
   "SYSTEM_MESSAGE": "",
+  "NON_MUSLIM_PROMPT_LINE": "",
   "TEMPERATURE": 0,
   "MAX_TOKENS": 0
 }
