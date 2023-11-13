@@ -7,7 +7,8 @@ from util import (
   get_chat_response, get_chat_stream_response, 
   ServerSentEvent, 
   config,
-  create_user, create_chat, add_message_to_chat, get_user_chats, get_chat_history, delete_chat_history
+  create_user, delete_user,
+  create_chat, add_message_to_chat, get_user_chats, get_chat_history, delete_chat_history
 )
 
 from urllib.parse import unquote
@@ -167,7 +168,11 @@ async def login():
   }, 200
 
 @app.route('/logout')
+@login_required
 async def logout():
+  print(current_user.auth_id)
+  delete_user(current_user.auth_id)
+
   logout_user()
 
   return {

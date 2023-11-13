@@ -160,6 +160,26 @@ def get_user_chats(user_id):
 
 	return chats
 
+def delete_user(user_id):
+	print("Deleting user...", user_id)
+	user = user_collection.find_one({
+		"_id": ObjectId(user_id)
+	})
+
+	chat_ids = user["chats"]
+	for chat_id in chat_ids:
+		chat = chats_collection.find_one_and_delete({
+			"_id": ObjectId(chat_id)
+		})
+
+		print("Deleted chat", chat["_id"], "from user", user_id)
+
+	user = user_collection.find_one_and_delete({ "_id": ObjectId(user_id )})
+	print("Deleted user")
+
+	return user
+
+
 try:
 	client.admin.command('ping')
 	print("[util] Pinged deployment. Successfully connected to MongoDB")

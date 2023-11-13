@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import "./Sidebar.css";
 
@@ -7,6 +7,7 @@ import SidebarItems from "./items/SidebarItems";
 import { useRouter } from "next/navigation";
 import { ChatContext } from "@/context/ChatContext";
 import { ChatContextType } from "@/types/chat";
+import Modal from "../Modal";
 
 interface SidebarProps {
   toggled: boolean;
@@ -14,16 +15,23 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
+  const router = useRouter();
+  
   const { setActiveChatId, setActiveChatMessages, setChatIdUrlParam } = useContext(ChatContext) as ChatContextType;
 
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handleLogOut = async () => {
-    const response = await fetch(`${process.env.API_ROUTE}/logout`)
+    setIsLoading(true);
+    const response = await fetch(`${process.env.API_ROUTE}/logout`, {
+      "credentials": "include"
+    })
     const data = await response.json();
 
     localStorage.removeItem('userId');
     console.log(data);
+    setIsLoading(false);
 
     router.push('/');
   }
@@ -39,6 +47,8 @@ export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
   }
 
   return (
+    <>
+    {showModal && <Modal isLoading={isLoading} closeModal={() => setShowModal(false)} handleLogOut={handleLogOut} />}
     <aside className={`sidebar ${toggled && 'toggled'} absolute md:relative flex flex-col justify-between w-[260px] bg-[#18233D] p-4`}>
       <div> {/* Top section */}
         <div> {/* Information */}
@@ -71,7 +81,7 @@ export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
           </svg>
           <p className="text-xs">This application uses GPT-4</p>
         </div>
-          <button onClick={handleLogOut} className="button flex justify-center items-center gap-2 mt-2 !w-full">
+          <button onClick={() => setShowModal(true)} className="button flex justify-center items-center gap-2 mt-2 !w-full">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
             </svg>
@@ -79,5 +89,6 @@ export default function Sidebar({ toggled, toggleSidebar }: SidebarProps) {
           </button>
       </div>
     </aside>
+  </>
   )
 }
