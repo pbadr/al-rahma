@@ -5,7 +5,7 @@
 
 .overlay {
   width: 100%;
-  height: calc(100vh - var(--navbar-height));
+  height: calc(100dvh - var(--navbar-height));
   @apply absolute bg-primary opacity-90;
 }
 

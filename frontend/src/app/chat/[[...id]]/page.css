@@ -1,5 +1,5 @@
 .chat-container {
-  height: calc(100vh - var(--navbar-height)); /* calc(100vh - 50px) Viewport - Navbar height */
+  height: calc(100dvh - var(--navbar-height)); /* calc(100vh - 50px) Viewport - Navbar height */
   width: calc(100% - var(--sidebar-width)); /* Full width - aside */
   display: flex;
   flex-direction: column;
