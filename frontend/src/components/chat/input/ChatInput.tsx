@@ -9,13 +9,13 @@ interface ChatInputProps {
 
 export default function ChatInput({ prompt, isLoading, handlePromptChange, onClickHandler }: ChatInputProps) {
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    event.preventDefault();
+    
     if (event.key === 'Enter' && prompt === '') {
-      event.preventDefault();
       return;
     }
 
     if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
       onClickHandler()
     }
   }
