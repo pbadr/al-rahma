@@ -15,7 +15,7 @@ from urllib.parse import unquote
 
 app = Quart(__name__)
 app.secret_key = config['QUART_APP_SECRET']
-app = cors(app, allow_origin=['http://localhost:3000'], allow_credentials=True)
+app = cors(app, allow_origin=['http://localhost:3000', 'https://al-rahma.vercel.app', 'https://www.rahma.live'], allow_credentials=True)
 
 from quart_auth import (
   QuartAuth, AuthUser, Unauthorized,
@@ -24,6 +24,12 @@ from quart_auth import (
 )
 
 QuartAuth(app)
+
+import os
+
+# Print out the configuration variables to check if they're being set correctly
+# print(f"QUART_AUTH_COOKIE_SAMESITE: {app.config['QUART_AUTH_COOKIE_SAMESITE']}")
+# print(f"QUART_AUTH_COOKIE_SECURE: {app.config['QUART_AUTH_COOKIE_SECURE']}")
 
 import asyncio
 
@@ -213,7 +219,6 @@ async def api():
     'response': response
   }, 200
 
-import os
 
 if not os.environ["ENVIRONMENT"] == "PRODUCTION":
   app.run(port=5000)

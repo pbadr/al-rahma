@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    API_ROUTE: 'https://alrahma-backend-865cad6b6a3a.herokuapp.com'
+    API_ROUTE: 'https://api.rahma.live'
   },
   reactStrictMode: false
 }
