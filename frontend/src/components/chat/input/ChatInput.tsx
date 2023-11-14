@@ -9,19 +9,18 @@ interface ChatInputProps {
 
 export default function ChatInput({ prompt, isLoading, handlePromptChange, onClickHandler }: ChatInputProps) {
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
-    event.preventDefault();
-    
     if (event.key === 'Enter' && prompt === '') {
+      event.preventDefault();
       return;
     }
 
     if (event.key === 'Enter' && !event.shiftKey) {
-      onClickHandler()
+      onClickHandler();
     }
   }
 
   return (
-    <form>
+    <form onSubmit={(event) => event.preventDefault()}>
       <div className="mb-3 p-2 lg:p-0">
         <div className="flex relative">
           <textarea
